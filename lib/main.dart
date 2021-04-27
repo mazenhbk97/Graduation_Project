@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:re7al/screens/Clubs.dart';
+import 'package:re7al/screens/ExplorePlaces.dart';
+import 'package:re7al/screens/Favorites.dart';
+import 'package:re7al/screens/Food.dart';
+import 'package:re7al/screens/Hospital.dart';
+import 'package:re7al/screens/Museums.dart';
+import 'package:re7al/screens/UserProfile.dart';
+import 'package:re7al/screens/Login.dart';
+import 'package:re7al/screens/ForgotPass.dart';
+import 'package:re7al/screens/SignUp.dart';
+import 'package:re7al/screens/test.dart';
+import 'screens/HomeScreen.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      //home: HomeScreen(),
+      routes: {
+        '/': (context) => HomeScreen(),
+        'UserProfile': (context) => UserProfile(),
+        'ExplorePlaces': (context) => ExplorePlaces(),
+        'Favorites': (context) => Favorites(),
+        'Museums': (context) => Museums(),
+        'Food': (context) => Food(),
+        'Hospital': (context) => Hospital(),
+        'Clubs': (context) => Clubs(),
+        'Login': (context) => Login(),
+        'SignUp': (context) => SignUp(),
+        'ForgotPass': (context) => ForgotPass(),
+        'test': (context) => test(),
+      },
+    );
+  }
+}
