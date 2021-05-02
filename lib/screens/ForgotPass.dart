@@ -1,68 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:re7al/Models/Places.dart';
 
-class ForgotPass extends StatelessWidget {
+class ForgotPass extends StatefulWidget {
+  @override
+  _ForgotPassState createState() => _ForgotPassState();
+}
+
+class _ForgotPassState extends State<ForgotPass> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        //BackgroundImage(image: 'assets/images/login_bg.png'),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              color: Colors.grey,
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, 'HomeScreen');
               },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
-            ),
-            title: Text(
-              'Forgot Password',
-              //style: kBodyText,
-            ),
-            centerTitle: true,
-          ),
-          body: Column(
-            children: [
-              Center(
-                child: Column(
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
+        title: Text(
+          'Forgot Password',
+          style: TextStyle(color: Colors.blueGrey),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 1,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 5,
+                ),
+                Image.asset(
+                  'images/re7al_logo.png',
+                  height: 100,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Column(
                   children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Reset',
+                          style: TextStyle(
+                            fontSize: 60,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Password',
+                          style: TextStyle(
+                            fontSize: 60,
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
-                      height: size.height * 0.1,
+                      height: 15,
                     ),
-                    Container(
-                      width: size.width * 0.8,
-                      child: Text(
-                        'Enter your email we will send instruction to reset your password',
-                        //style: kBodyText,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'Enter the email address',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 20,
+                    Row(
+                      children: [
+                        Text(
+                          'associated with your account.',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
                     ),
-                    TextInputField(
-                      icon: Icons.mail,
-                      hint: 'Email',
-                      inputType: TextInputType.emailAddress,
-                      inputAction: TextInputAction.done,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    RoundedButton(buttonName: 'Send')
                   ],
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 50,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.mail),
+                      labelText: 'Email',
+                      hintText: 'UserName@gmail.com'),
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Email is Required';
+                    }
+
+                    if (!RegExp(
+                            r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                        .hasMatch(value)) {
+                      return 'Please enter a valid email Address';
+                    }
+
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  width: 280,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.blueGrey,
+                  ),
+                  child: FlatButton(
+                    child: Text(
+                      'Reset Password',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                      //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 }

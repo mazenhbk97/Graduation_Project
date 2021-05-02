@@ -140,7 +140,7 @@ class SearchBar extends StatelessWidget {
                       icon: Icon(Icons.person_rounded),
                       iconSize: 45,
                       onPressed: () {
-                        Navigator.pushNamed(context, 'SignUp');
+                        Navigator.pushNamed(context, 'Login');
                       },
                       //color: Colors.red,
                     ),

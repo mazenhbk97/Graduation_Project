@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:re7al/Models/MyNavigationBar.dart';
 import 'package:re7al/Models/Places.dart';
+import 'package:re7al/screens/test.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,6 +10,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TabController tabController;
+  int currentIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     iconSize: 40,
                                     color: Colors.purpleAccent,
                                     onPressed: () {
-                                      Navigator.pushNamed(context, 'test');
+                                      Navigator.pushNamed(context, 'Login');
                                     },
                                   ),
                                 ),
@@ -226,6 +229,36 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: MyNavigationBar(),
+      // bottomNavigationBar: Container(
+      //   height: MediaQuery.of(context).size.height * 0.06,
+      //   child: TabBar(
+      //     labelColor: Colors.deepPurple[700],
+      //     unselectedLabelColor: Colors.grey[400],
+      //     onTap: (value) {
+      //       currentIndex = value;
+      //     },
+      //     indicatorColor: Colors.transparent,
+      //     controller: tabController,
+      //     tabs: [
+      //       Icon(
+      //         Icons.home,
+      //         size: 33,
+      //       ),
+      //       Icon(
+      //         Icons.mic_none,
+      //         size: 33,
+      //       ),
+      //       Icon(
+      //         Icons.videocam_outlined,
+      //         size: 33,
+      //       ),
+      //       Icon(
+      //         Icons.notifications_active_outlined,
+      //         size: 33,
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

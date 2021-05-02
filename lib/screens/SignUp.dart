@@ -99,7 +99,7 @@ class FormScreenState extends State<SignUp> {
         return null;
       },
       onSaved: (String value) {
-        _confirmpassword = value;
+        _password = value;
       },
     );
   }
@@ -194,30 +194,20 @@ class FormScreenState extends State<SignUp> {
                         _buildPassword(),
                         _buildconfirmPassword(),
                         SizedBox(height: 30),
-                        // RaisedButton(
-                        //   child: Text(
-                        //     'Submit',
-                        //     style: TextStyle(color: Colors.white, fontSize: 16),
-                        //   ),
-                        //   onPressed: () {
-                        //     if (!_formKey.currentState.validate()) {
-                        //       return;
-                        //     }
+
+                        // _formKey.currentState.save();
                         //
-                        //     // _formKey.currentState.save();
-                        //     //
-                        //     // print(_name);
-                        //     // print(_email);
-                        //     // print(_phoneNumber);
-                        //     // print(_url);
-                        //     // print(_password);
-                        //     // print(_calories);
-                        //
-                        //     //Send to API
-                        //   },
-                        // ),
+                        // print(_name);
+                        // print(_email);
+                        // print(_phoneNumber);
+                        // print(_url);
+                        // print(_password);
+                        // print(_calories);
+
+                        //Send to API
+                        //  },
+                        //  ),
                         Container(
-                          //height: size.height * 0.07,
                           width: 280,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),

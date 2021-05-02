@@ -1,100 +1,191 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:re7al/Models/Places.dart';
+import 'package:re7al/Widgets/Login_TFF.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool check = false;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // BackgroundImage(
-        //   image: 'assets/images/images/login.jpg',
-        // ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Container(
-            // decoration: BoxDecoration(
-            //   image: DecorationImage(
-            //       image: ExactAssetImage("images/login.jpg"),
-            //       fit: BoxFit.cover),
-            // ),
-            child: Column(
-              children: [
-                // Padding(
-                //   padding: EdgeInsets.only(top: 60.0, bottom: 40.0),
-                //   child: CircleAvatar(
-                //     radius: 90.0,
-                //     backgroundImage: AssetImage('images/Re7al.jfif'),
-                //   ),
-                // ),
-
-                Flexible(
-                  child: Center(
-                    child: CircleAvatar(
-                      radius: 90.0,
-                      backgroundImage: AssetImage('images/Re7al.jfif'),
-                    ),
-                  ),
-                ),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // TextInputField(
-                    //   icon: FontAwesomeIcons.envelope,
-                    //   hint: 'Email',
-                    //   inputType: TextInputType.emailAddress,
-                    //   inputAction: TextInputAction.next,
-                    // ),
-                    // PasswordInput(
-                    //   icon: FontAwesomeIcons.lock,
-                    //   hint: 'Password',
-                    //   inputAction: TextInputAction.done,
-                    // ),
-                    GestureDetector(
-                      onTap: () =>
-                          Navigator.pushNamed(context, 'ForgotPassword'),
-                      child: Text(
-                        'Forgot Password',
-                        style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 20.0),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    // RoundedButton(
-                    //   buttonName: 'Login',
-                    // ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, 'CreateNewAccount'),
-                  child: Container(
-                    child: Text(
-                      'Create New Account',
-                      style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
-                    ),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.white))),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                color: Colors.grey,
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context, 'HomeScreen');
+                },
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              );
+            },
           ),
-        )
-      ],
+          //backgroundColor: Colors.grey[500].withOpacity(0.6),
+          backgroundColor: Colors.white,
+          elevation: 1,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 5,
+              ),
+              Image.asset(
+                'images/re7al_logo.png',
+                height: 100,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Login',
+                style: TextStyle(
+                    fontSize: 45,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Login_TFF(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Checkbox(
+                          value: this.check,
+                          onChanged: (bool value) {
+                            setState(() {
+                              this.check = value;
+                            });
+                          },
+                        ),
+                      ),
+                      Text('Remember me'),
+                    ],
+                  ), //Checkbox
+
+                  GestureDetector(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            'Forgot password?',
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'ForgotPass');
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Container(
+                width: 280,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.blueGrey,
+                ),
+                child: FlatButton(
+                  child: Text(
+                    'Login',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Center(
+                child: Text(
+                  'Or',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.orangeAccent,
+                    child: Text(
+                      'G',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.blueAccent,
+                    child: Text(
+                      'F',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text('Do not have an account yet ?')),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: GestureDetector(
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, 'SignUp');
+                      },
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

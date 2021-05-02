@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:re7al/Models/Places.dart';
+import 'package:re7al/Widgets/PickUpUserPP.dart';
+import 'package:re7al/Widgets/UserProfile_TFF.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:re7al/screens/test.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -12,6 +16,7 @@ class _UserProfileState extends State<UserProfile> {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: Colors.blueGrey,
           appBar: AppBar(
             leading: Builder(
               builder: (BuildContext context) {
@@ -39,158 +44,57 @@ class _UserProfileState extends State<UserProfile> {
                   Padding(
                     padding: EdgeInsets.only(top: 20),
                   ),
+                  PickUpUserPP(),
                   Container(
-                    height: 160,
-                    width: 170,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.grey[500].withOpacity(0.8),
-                            ),
-                            height: 130,
-                            width: 130,
-                            child: Icon(Icons.perm_identity,
-                                color: Colors.white, size: 90),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                            ),
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                    margin: EdgeInsets.only(
+                      top: 40,
+                      left: 30,
+                      right: 30,
+                      bottom: 20,
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Column(
-                    children: [
-                      TextInputField(
-                        icon: Icons.person_rounded,
-                        hint: 'User',
-                        inputType: TextInputType.name,
-                        inputAction: TextInputAction.next,
-                      ),
-                      TextInputField(
-                        icon: Icons.person_rounded,
-                        hint: 'User',
-                        inputType: TextInputType.name,
-                        inputAction: TextInputAction.next,
-                      ),
-                      TextInputField(
-                        icon: Icons.mail_outline,
-                        hint: 'Email',
-                        inputType: TextInputType.emailAddress,
-                        inputAction: TextInputAction.next,
-                      ),
-                      PasswordInput(
-                        icon: Icons.lock,
-                        hint: 'Password',
-                        inputAction: TextInputAction.next,
-                      ),
-                      PasswordInput(
-                        icon: Icons.lock,
-                        hint: 'Confirm Password',
-                        inputAction: TextInputAction.done,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      RoundedButton(buttonName: 'Register'),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Column(
                         children: [
-                          Text(
-                            'Already have an account?',
-                            //style: kBodyText,
+                          UserProfile_TFF(
+                            TFprefixicon: Icon(Icons.person_rounded),
+                            TFlabeltext: 'Name',
+                            TFinitialvalue: 'My Name',
+                            isvisible: false,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, 'UserProfile');
-                            },
-                            child: Text(
-                              'Login',
-                              style: TextStyle(color: Colors.blue),
-                            ),
+                          UserProfile_TFF(
+                            TFprefixicon: Icon(Icons.mail),
+                            TFlabeltext: 'E-mail',
+                            TFinitialvalue: 'My_Name@gmail.com',
+                            isvisible: false,
+                          ),
+                          UserProfile_TFF(
+                            TFprefixicon: Icon(Icons.phone),
+                            TFlabeltext: 'Phone Number',
+                            TFinitialvalue: '01********',
+                            isvisible: false,
+                          ),
+                          UserProfile_TFF(
+                            TFprefixicon: Icon(Icons.lock),
+                            TFlabeltext: 'Password',
+                            TFinitialvalue: '********',
+                            isvisible: true,
+                          ),
+                          UserProfile_TFF(
+                            TFprefixicon: Icon(Icons.location_on),
+                            TFlabeltext: 'Location',
+                            TFinitialvalue: 'My City',
+                            isvisible: false,
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                         ],
                       ),
-                      // Column(
-                      //   children: [
-                      //     TextInputField(
-                      //       icon: Icons.person_rounded,
-                      //       hint: 'User',
-                      //       inputType: TextInputType.name,
-                      //       inputAction: TextInputAction.next,
-                      //     ),
-                      //     TextInputField(
-                      //       icon: Icons.mail_outline,
-                      //       hint: 'Email',
-                      //       inputType: TextInputType.emailAddress,
-                      //       inputAction: TextInputAction.next,
-                      //     ),
-                      //     PasswordInput(
-                      //       icon: Icons.lock,
-                      //       hint: 'Password',
-                      //       inputAction: TextInputAction.next,
-                      //     ),
-                      //     PasswordInput(
-                      //       icon: Icons.lock,
-                      //       hint: 'Confirm Password',
-                      //       inputAction: TextInputAction.done,
-                      //     ),
-                      //     SizedBox(
-                      //       height: 25,
-                      //     ),
-                      //     RoundedButton(buttonName: 'Register'),
-                      //     SizedBox(
-                      //       height: 30,
-                      //     ),
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         Text(
-                      //           'Already have an account?',
-                      //           //style: kBodyText,
-                      //         ),
-                      //         GestureDetector(
-                      //           onTap: () {
-                      //             Navigator.pushNamed(context, 'UserProfile');
-                      //           },
-                      //           // child: Text(
-                      //           //   'Login',
-                      //           //   style: kBodyText.copyWith(
-                      //           //       color: kBlue, fontWeight: FontWeight.bold),
-                      //           // ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //     SizedBox(
-                      //       height: 20,
-                      //     ),
-                      //   ],
-                      // )
-                    ],
+                    ),
                   ),
                 ],
               ),
