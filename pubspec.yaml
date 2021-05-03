@@ -50,6 +50,11 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/re7al_logo.png
+    - images/bestPlaces.png
+    - images/bestPlaces2.png
+    - images/bestPlaces3.png
+    - images/bestPlaces4.png
+    - images/bgcolor.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:re7al/Models/MyNavigationBar.dart';
 import 'package:re7al/Models/Places.dart';
 import 'package:re7al/screens/test.dart';
+import 'package:re7al/Widgets/Place_Card.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,8 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TabController tabController;
-  int currentIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,240 +24,211 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: Container(
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: <Widget>[
-              Container(
-                child: Column(
-                  children: [
-                    //SearchBar(),
-                    Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 20, right: 15, left: 15),
-                          child: Text(
-                            'Welcome in  CityName',
-                            style: TextStyle(fontSize: 15),
-                          ),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/bgcolor.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 20, right: 15, left: 15),
+                        child: Text(
+                          'Welcome in  CityName',
+                          style: TextStyle(fontSize: 15),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsets.only(top: 25, left: 15, bottom: 10),
-                          child: Text(
-                            'Type of services',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Column(
-                            children: [
-                              Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(15),
-                                child: Container(
-                                  height: 70,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    //color: Colors.white
-                                  ),
-                                  child: IconButton(
-                                    //SvgPicture.asset('svg/museum.png'
-                                    icon: Icon(Icons.museum_outlined),
-                                    iconSize: 40,
-                                    color: Colors.deepPurpleAccent,
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, 'Museums');
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Tourist',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w900),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Column(
-                            children: [
-                              Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(15),
-                                child: Container(
-                                  height: 70,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.white),
-                                  child: IconButton(
-                                    icon: Icon(Icons.restaurant),
-                                    iconSize: 40,
-                                    color: Colors.purpleAccent,
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, 'Login');
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Food',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w900),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Column(
-                            children: [
-                              Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(15),
-                                child: Container(
-                                  height: 70,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.white),
-                                  child: IconButton(
-                                    icon: Icon(Icons.local_hospital),
-                                    iconSize: 40,
-                                    color: Colors.redAccent,
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, 'Hospital');
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Hospital',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w900),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Column(
-                            children: [
-                              Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular(15),
-                                child: Container(
-                                  height: 70,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.white),
-                                  child: IconButton(
-                                    icon: Icon(Icons.sports),
-                                    iconSize: 40,
-                                    color: Colors.green,
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, 'Clubs');
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Clubs',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w900),
-                              ),
-                            ],
-                          ),
-                        ],
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 45,
-                            left: 15,
-                            bottom: 20,
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 25, left: 15, bottom: 10),
+                        child: Text(
+                          'Type of services',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
                           ),
-                          child: Text(
-                            'Best places ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          children: [
+                            Material(
+                              //elevation: 5,
+                              borderRadius: BorderRadius.circular(15),
+                              child: Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  //color: Colors.white
+                                ),
+                                child: IconButton(
+                                  //SvgPicture.asset('svg/museum.png'
+                                  icon: Icon(Icons.museum_outlined),
+                                  iconSize: 40,
+                                  color: Colors.deepPurpleAccent,
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, 'Museums');
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Tourist',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w900),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          children: [
+                            Material(
+                              //elevation: 5,
+                              borderRadius: BorderRadius.circular(15),
+                              child: Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white),
+                                child: IconButton(
+                                  icon: Icon(Icons.restaurant),
+                                  iconSize: 40,
+                                  color: Colors.purpleAccent,
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, 'test');
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Food',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w900),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          children: [
+                            Material(
+                              elevation: 5,
+                              borderRadius: BorderRadius.circular(15),
+                              child: Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white),
+                                child: IconButton(
+                                  icon: Icon(Icons.local_hospital),
+                                  iconSize: 40,
+                                  color: Colors.redAccent,
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, 'Hospital');
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Hospital',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w900),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Column(
+                          children: [
+                            Material(
+                              elevation: 5,
+                              borderRadius: BorderRadius.circular(15),
+                              child: Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white),
+                                child: IconButton(
+                                  icon: Icon(Icons.sports),
+                                  iconSize: 40,
+                                  color: Colors.green,
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, 'Clubs');
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Clubs',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w900),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Places(),
-                    Places(),
-                  ],
-                ),
-              )
-            ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 45,
+                          left: 15,
+                          bottom: 20,
+                        ),
+                        child: Text(
+                          'Best places ',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Place_Card(),
+                  Place_Card(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
       bottomNavigationBar: MyNavigationBar(),
-      // bottomNavigationBar: Container(
-      //   height: MediaQuery.of(context).size.height * 0.06,
-      //   child: TabBar(
-      //     labelColor: Colors.deepPurple[700],
-      //     unselectedLabelColor: Colors.grey[400],
-      //     onTap: (value) {
-      //       currentIndex = value;
-      //     },
-      //     indicatorColor: Colors.transparent,
-      //     controller: tabController,
-      //     tabs: [
-      //       Icon(
-      //         Icons.home,
-      //         size: 33,
-      //       ),
-      //       Icon(
-      //         Icons.mic_none,
-      //         size: 33,
-      //       ),
-      //       Icon(
-      //         Icons.videocam_outlined,
-      //         size: 33,
-      //       ),
-      //       Icon(
-      //         Icons.notifications_active_outlined,
-      //         size: 33,
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

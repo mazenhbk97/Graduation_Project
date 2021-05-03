@@ -163,7 +163,7 @@ class FormScreenState extends State<SignUp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
                 Image.asset(
                   'images/re7al_logo.png',
@@ -193,7 +193,7 @@ class FormScreenState extends State<SignUp> {
                         _buildEmail(),
                         _buildPassword(),
                         _buildconfirmPassword(),
-                        SizedBox(height: 30),
+                        SizedBox(height: 40),
 
                         // _formKey.currentState.save();
                         //
