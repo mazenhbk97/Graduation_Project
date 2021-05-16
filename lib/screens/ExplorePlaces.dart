@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:re7al/Models/MyNavigationBar.dart';
 import 'package:re7al/Models/Places.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:re7al/Widgets/Constants.dart';
+import 'package:re7al/Widgets/MyAppBar.dart';
+import 'package:re7al/Widgets/Place_Card.dart';
+import 'package:re7al/Widgets/Place_StoryCard.dart';
 
 class ExplorePlaces extends StatefulWidget {
   @override
@@ -9,15 +12,17 @@ class ExplorePlaces extends StatefulWidget {
 }
 
 class _ExplorePlacesState extends State<ExplorePlaces> {
+  String CityName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(90),
-        child: AppBar(
-          flexibleSpace: SafeArea(child: SearchBar()),
-          elevation: 0,
-          backgroundColor: Colors.white,
+        preferredSize: Size.fromHeight(70),
+        child: MyAppBar(
+          MyABicon: Icon(
+            Icons.menu_rounded,
+            size: 40,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -27,12 +32,20 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
             Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 20, right: 15, left: 15),
+                  margin: EdgeInsets.only(top: 20, left: 15),
                   child: Text(
-                    'Welcome in  CityName',
+                    'Welcome in ',
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
+                Container(
+                    margin: EdgeInsets.only(top: 20, right: 15, left: 15),
+                    child: GestureDetector(
+                      child: Text(
+                        '$CityName',
+                        style: TextStyle(fontSize: 20, color: font_color),
+                      ),
+                    )),
               ],
             ),
             Row(
@@ -44,6 +57,7 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
+                      color: font_color,
                     ),
                   ),
                 ),
@@ -75,18 +89,18 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
+                      color: font_color,
                     ),
                   ),
                 ),
               ],
             ),
-            Places(),
-            Places(),
-            Places(),
+            Place_Card(),
+            Place_Card(),
+            Place_Card(),
           ],
         ),
       ),
-      bottomNavigationBar: MyNavigationBar(),
     );
   }
 }

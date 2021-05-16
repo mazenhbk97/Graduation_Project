@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:re7al/Widgets/Constants.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -140,8 +141,10 @@ class FormScreenState extends State<SignUp> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              color: Colors.grey,
-              icon: const Icon(Icons.arrow_back),
+              color: user_auth,
+              icon: const Icon(
+                Icons.arrow_back,
+              ),
               onPressed: () {
                 Navigator.pop(context, 'HomeScreen');
               },
@@ -151,41 +154,39 @@ class FormScreenState extends State<SignUp> {
         ),
         //backgroundColor: Colors.grey[500].withOpacity(0.6),
         backgroundColor: Colors.white,
-        elevation: 1,
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          //color: Colors.grey[500].withOpacity(0.6),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 5,
+      body: SafeArea(
+        child: new Stack(
+          children: <Widget>[
+            new Container(
+              decoration: new BoxDecoration(
+                image: new DecorationImage(
+                  image: new AssetImage("images/bgcolor.png"),
+                  fit: BoxFit.cover,
                 ),
-                Image.asset(
-                  'images/re7al_logo.png',
-                  height: 100,
-                ),
-                Text(
-                  'Sign Up',
-                  style: TextStyle(
+              ),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Image.asset(
+                    'images/re7al_logo.png',
+                    height: 100,
+                  ),
+                  Text(
+                    'Sign Up',
+                    style: TextStyle(
                       fontSize: 45,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    left: 20,
-                    right: 20,
+                      color: user_auth,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Column(
                       children: [
                         _buildFirstName(),
@@ -207,34 +208,33 @@ class FormScreenState extends State<SignUp> {
                         //Send to API
                         //  },
                         //  ),
-                        Container(
-                          width: 280,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.blueGrey,
-                          ),
-                          child: FlatButton(
-                            child: Text(
-                              'Sign Up',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 25),
-                              //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            onPressed: () {
-                              if (!_formKey.currentState.validate()) {
-                                return;
-                              }
-                              ;
-                            },
-                          ),
-                        ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    width: 280,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: user_auth,
+                    ),
+                    child: FlatButton(
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                        //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        if (!_formKey.currentState.validate()) {
+                          return;
+                        }
+                        ;
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

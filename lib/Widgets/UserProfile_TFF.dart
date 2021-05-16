@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:re7al/Widgets/Constants.dart';
 
 class UserProfile_TFF extends StatefulWidget {
   UserProfile_TFF(
@@ -32,7 +33,7 @@ class _UserProfile_TFFState extends State<UserProfile_TFF> {
           alignment: Alignment.centerLeft,
           icon: Icon(
             Icons.edit,
-            color: Colors.blueGrey,
+            color: user_auth,
           ),
           onPressed: () {
             setState(() {

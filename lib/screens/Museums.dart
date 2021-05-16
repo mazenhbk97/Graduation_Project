@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:re7al/Models/MyNavigationBar.dart';
 import 'package:re7al/Models/Places.dart';
 
 class Museums extends StatefulWidget {
@@ -11,14 +10,6 @@ class _MuseumsState extends State<Museums> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(90),
-        child: AppBar(
-          flexibleSpace: SafeArea(child: SearchBar()),
-          elevation: 0,
-          backgroundColor: Colors.white,
-        ),
-      ),
       body: SafeArea(
         child: Container(
           child: ListView(
@@ -42,36 +33,9 @@ class _MuseumsState extends State<Museums> {
                       children: [
                         Padding(
                           padding:
-                              EdgeInsets.only(top: 25, left: 15, bottom: 10),
-                          child: Text(
-                            'Nearest Places',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsets.only(top: 25, left: 20, bottom: 15),
-                        ),
-
-                        Story(),
-                        //Story(),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding:
                               EdgeInsets.only(top: 25, left: 15, bottom: 15),
                           child: Text(
-                            'Best places',
+                            'Tourism',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

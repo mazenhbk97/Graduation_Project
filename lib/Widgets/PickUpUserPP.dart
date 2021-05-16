@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:re7al/Widgets/Constants.dart';
 
 class PickUpUserPP extends StatefulWidget {
   @override
@@ -46,7 +47,7 @@ class _PickUpUserPPState extends State<PickUpUserPP> {
                   ? Icon(
                       Icons.person_rounded,
                       size: 100,
-                      color: Colors.blueGrey,
+                      color: user_auth,
                     )
                   : Image.file(
                       _image,
@@ -63,14 +64,14 @@ class _PickUpUserPPState extends State<PickUpUserPP> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.blueGrey, width: 2),
+                border: Border.all(color: bk_color, width: 2),
               ),
               child: IconButton(
                 onPressed: getImage,
                 icon: Icon(
                   Icons.camera_alt_rounded,
                   size: 25,
-                  color: Colors.blueGrey,
+                  color: user_auth,
                 ),
               ),
             ),

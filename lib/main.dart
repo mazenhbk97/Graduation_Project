@@ -5,11 +5,14 @@ import 'package:re7al/screens/Favorites.dart';
 import 'package:re7al/screens/Food.dart';
 import 'package:re7al/screens/Hospital.dart';
 import 'package:re7al/screens/Museums.dart';
+import 'package:re7al/screens/Settings.dart';
 import 'package:re7al/screens/UserProfile.dart';
 import 'package:re7al/screens/Login.dart';
 import 'package:re7al/screens/ForgotPass.dart';
 import 'package:re7al/screens/SignUp.dart';
 import 'package:re7al/screens/test.dart';
+import 'package:re7al/screens/SideMenu.dart';
+import 'package:re7al/screens/Settings.dart';
 import 'screens/HomeScreen.dart';
 
 void main() {
@@ -21,7 +24,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      //home: HomeScreen(),
       routes: {
         '/': (context) => HomeScreen(),
         'UserProfile': (context) => UserProfile(),
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         'SignUp': (context) => SignUp(),
         'ForgotPass': (context) => ForgotPass(),
         'test': (context) => test(),
+        'SideMenu': (context) => SideMenu(),
+        'Settings': (context) => Settings(),
       },
     );
   }

@@ -25,7 +25,7 @@ class _Place_CardState extends State<Place_Card> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40),
         ),
-        elevation: 3,
+        elevation: 2,
         margin: EdgeInsets.all(10),
         child: Wrap(
           children: [
@@ -105,7 +105,7 @@ class _Place_CardState extends State<Place_Card> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40),
         ),
-        elevation: 4,
+        elevation: 2,
         margin: EdgeInsets.all(10),
         child: Wrap(
           children: [
