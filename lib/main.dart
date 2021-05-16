@@ -6,6 +6,7 @@ import 'package:re7al/screens/Food.dart';
 import 'package:re7al/screens/Hospital.dart';
 import 'package:re7al/screens/Museums.dart';
 import 'package:re7al/screens/Settings.dart';
+import 'package:re7al/screens/SplashScreens.dart';
 import 'package:re7al/screens/UserProfile.dart';
 import 'package:re7al/screens/Login.dart';
 import 'package:re7al/screens/ForgotPass.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => HomeScreen(),
+        '/': (context) => SplashScreens(),
+        'HomeScreen': (context) => HomeScreen(),
         'UserProfile': (context) => UserProfile(),
         'ExplorePlaces': (context) => ExplorePlaces(),
         'Favorites': (context) => Favorites(),

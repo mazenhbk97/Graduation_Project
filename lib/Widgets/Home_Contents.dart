@@ -99,7 +99,7 @@ class _Home_ContentsState extends State<Home_Contents> {
                       HS_Icons(
                         HSicon: Icon(Icons.local_hospital),
                         HScolor: Colors.deepOrangeAccent,
-                        HSnavigator: 'Hospital',
+                        HSnavigator: 'SplashScreens',
                         HSname: 'Hospital',
                       ),
                       SizedBox(
