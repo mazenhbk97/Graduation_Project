@@ -99,7 +99,7 @@ class _Home_ContentsState extends State<Home_Contents> {
                       HS_Icons(
                         HSicon: Icon(Icons.local_hospital),
                         HScolor: Colors.deepOrangeAccent,
-                        HSnavigator: 'SplashScreens',
+                        HSnavigator: 'Hospital',
                         HSname: 'Hospital',
                       ),
                       SizedBox(
@@ -108,7 +108,7 @@ class _Home_ContentsState extends State<Home_Contents> {
                       HS_Icons(
                         HSicon: Icon(Icons.grass_rounded),
                         HScolor: Colors.green,
-                        HSnavigator: 'Clubs',
+                        HSnavigator: 'ModalBottomSheet',
                         HSname: 'Clubs',
                       ),
                     ],
@@ -134,7 +134,7 @@ class _Home_ContentsState extends State<Home_Contents> {
                   ],
                 ),
                 Place_Card(),
-                Place_Card(),
+                //Place_Card(),
               ],
             ),
           ),

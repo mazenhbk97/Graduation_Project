@@ -20,7 +20,9 @@ class _Place_CardState extends State<Place_Card> {
 
   Widget _Card1(Image card1_img, String card1_name) {
     return GestureDetector(
-      onTap: select_card,
+      onTap: () {
+        Navigator.pushNamed(context, 'Place');
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40),
@@ -100,7 +102,9 @@ class _Place_CardState extends State<Place_Card> {
 
   Widget _Card2(Image card2_img, String card2_name) {
     return GestureDetector(
-      onTap: select_card,
+      onTap: () {
+        Navigator.pushNamed(context, 'Place');
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40),

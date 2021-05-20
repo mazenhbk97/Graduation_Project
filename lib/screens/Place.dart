@@ -8,14 +8,14 @@ import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:readmore/readmore.dart';
 
-class test extends StatefulWidget {
-  const test({Key key}) : super(key: key);
+class Place extends StatefulWidget {
+  const Place({Key key}) : super(key: key);
 
   @override
-  _testState createState() => _testState();
+  _PlaceState createState() => _PlaceState();
 }
 
-class _testState extends State<test> {
+class _PlaceState extends State<Place> {
   TabController _tabController;
 
   bool fav = true;

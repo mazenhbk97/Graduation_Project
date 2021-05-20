@@ -10,8 +10,8 @@ class _SplashScreensState extends State<SplashScreens> {
   @override
   Widget build(BuildContext context) {
     Widget carousel = new Carousel(
-      autoplay: false,
-      boxFit: BoxFit.cover,
+      autoplay: true,
+      boxFit: BoxFit.fill,
       dotBgColor: Colors.transparent,
       images: [
         new AssetImage('images/bg.jpg'),
@@ -24,24 +24,28 @@ class _SplashScreensState extends State<SplashScreens> {
       animationDuration: Duration(seconds: 1),
     );
 
-    return new Scaffold(
-      body: carousel,
-      floatingActionButton: Container(
-        height: 50,
-        width: 110,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white54,
-        ),
-        child: FlatButton(
-          child: Text(
-            'Next ➔',
-            style: TextStyle(
-                fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: new Scaffold(
+        body: carousel,
+        floatingActionButton: Container(
+          height: 50,
+          width: 110,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white54,
           ),
-          onPressed: () {
-            Navigator.pushNamed(context, 'HomeScreen');
-          },
+          child: FlatButton(
+            child: Text(
+              'Next ➔',
+              style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, 'HomeScreen');
+            },
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:re7al/screens/Clubs.dart';
 import 'package:re7al/screens/ExplorePlaces.dart';
 import 'package:re7al/screens/Favorites.dart';
@@ -15,6 +16,7 @@ import 'package:re7al/screens/test.dart';
 import 'package:re7al/screens/SideMenu.dart';
 import 'package:re7al/screens/Settings.dart';
 import 'screens/HomeScreen.dart';
+import 'package:re7al/screens/Place.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,6 +43,8 @@ class MyApp extends StatelessWidget {
         'test': (context) => test(),
         'SideMenu': (context) => SideMenu(),
         'Settings': (context) => Settings(),
+        'ModalBottomSheet': (context) => BottomSheetModal(),
+        'Place': (context) => Place(),
       },
     );
   }
