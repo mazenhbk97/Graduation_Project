@@ -7,6 +7,7 @@ import 'package:re7al/Widgets/Favorite_Card.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:readmore/readmore.dart';
+import 'package:re7al/Widgets/Map.dart';
 
 class Place extends StatefulWidget {
   const Place({Key key}) : super(key: key);
@@ -364,40 +365,43 @@ class _PlaceState extends State<Place> {
                         ),
                       ),
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            Favorite_Card(
-                              CardName: 'pyramids',
-                              CardDate: '22 mai 2021 ',
-                              CardRating: 4.9,
-                              CardReviews: 19,
-                            ),
-                            Favorite_Card(
-                              CardName: 'pyramids',
-                              CardDate: '22 mai 2021',
-                              CardRating: 4.9,
-                              CardReviews: 19,
-                            ),
-                            Favorite_Card(
-                              CardName: 'pyramids',
-                              CardDate: '22 mai 2021',
-                              CardRating: 4.9,
-                              CardReviews: 19,
-                            ),
-                            Favorite_Card(
-                              CardName: 'pyramids',
-                              CardDate: '22 mai 2021',
-                              CardRating: 4.9,
-                              CardReviews: 19,
-                            ),
-                          ],
-                        ),
-                      ),
+                    Container(
+                      child: Map(),
                     ),
+                    // SingleChildScrollView(
+                    //   scrollDirection: Axis.vertical,
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(10),
+                    //     child: Column(
+                    //       children: [
+                    //         Favorite_Card(
+                    //           CardName: 'pyramids',
+                    //           CardDate: '22 mai 2021 ',
+                    //           CardRating: 4.9,
+                    //           CardReviews: 19,
+                    //         ),
+                    //         Favorite_Card(
+                    //           CardName: 'pyramids',
+                    //           CardDate: '22 mai 2021',
+                    //           CardRating: 4.9,
+                    //           CardReviews: 19,
+                    //         ),
+                    //         Favorite_Card(
+                    //           CardName: 'pyramids',
+                    //           CardDate: '22 mai 2021',
+                    //           CardRating: 4.9,
+                    //           CardReviews: 19,
+                    //         ),
+                    //         Favorite_Card(
+                    //           CardName: 'pyramids',
+                    //           CardDate: '22 mai 2021',
+                    //           CardRating: 4.9,
+                    //           CardReviews: 19,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
