@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/Login_TFF.dart';
+import 'package:re7al/providers/auth_provider.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -10,6 +12,21 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool check = false;
+  String mail;
+  String password;
+
+  void setMail(String mailField) {
+    setState(() {
+      mail = mailField;
+    });
+  }
+
+  void setPassword(String passwordField) {
+    setState(() {
+      password = passwordField;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +81,10 @@ class _LoginState extends State<Login> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Login_TFF(),
+                  child: Login_TFF(
+                    saveName: setMail,
+                    savePassword: setPassword,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,6 +137,11 @@ class _LoginState extends State<Login> {
                     color: user_auth,
                   ),
                   child: FlatButton(
+                    onPressed: () async {
+                      await Provider.of<AuthProvider>(context, listen: false)
+                          .signIn(mail, password);
+                      Navigator.of(context).pop();
+                    },
                     child: Text(
                       'Login',
                       style: TextStyle(color: Colors.white, fontSize: 25),
