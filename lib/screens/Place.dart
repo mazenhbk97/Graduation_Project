@@ -8,6 +8,7 @@ import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:readmore/readmore.dart';
 import 'package:re7al/Widgets/Map.dart';
+import 'package:re7al/Widgets/BookingDialogue.dart';
 
 class Place extends StatefulWidget {
   const Place({Key key}) : super(key: key);
@@ -20,6 +21,10 @@ class _PlaceState extends State<Place> {
   TabController _tabController;
 
   bool fav = true;
+  bool available = true;
+  String typeOfPlace;
+  String timeToVisit;
+
   @override
   void dispose() {
     super.dispose();
@@ -131,10 +136,6 @@ class _PlaceState extends State<Place> {
                                   CircleAvatar(
                                     radius: 22,
                                     backgroundColor: font_color,
-                                    // decoration: BoxDecoration(
-                                    //   color: font_color,
-                                    //   borderRadius: BorderRadius.circular(30),
-                                    // ),
                                     child: Center(
                                       child: IconButton(
                                         iconSize: 30,
@@ -203,8 +204,8 @@ class _PlaceState extends State<Place> {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.only(
+                                  bottom: 20, right: 20, left: 20),
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
@@ -226,6 +227,92 @@ class _PlaceState extends State<Place> {
                                 ),
                               ),
                             ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "Available to visit ",
+                                          style: TextStyle(
+                                              color: font_color,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        WidgetSpan(
+                                          child: Icon(
+                                              available
+                                                  ? Icons
+                                                      .check_circle_outline_rounded
+                                                  : Icons
+                                                      .radio_button_unchecked_rounded,
+                                              color: Colors.green,
+                                              size: 18),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    'Place Type: $typeOfPlace',
+                                    style: TextStyle(
+                                        color: font_color,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Time to visit: $timeToVisit',
+                                    style: TextStyle(
+                                        color: font_color,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    height: 25,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: font_color,
+                                          offset: Offset(0.0, 1.0), //(x,y)
+                                          blurRadius: 5.0,
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: font_color,
+                                    ),
+                                    child: FlatButton(
+                                      child: Text(
+                                        'Booking',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                        //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  BookingDialogue());
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
                             Padding(
                               padding: const EdgeInsets.only(
                                   right: 20, left: 20, top: 20, bottom: 10),

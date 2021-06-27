@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:re7al/Widgets/BDContent.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:re7al/screens/AppNotf.dart';
 import 'package:re7al/screens/Clubs.dart';
@@ -20,6 +21,9 @@ import 'package:re7al/screens/Settings.dart';
 import 'screens/HomeScreen.dart';
 import 'package:re7al/screens/Place.dart';
 import 'package:re7al/screens/ContactUs.dart';
+import 'package:re7al/screens/ChooseCity.dart';
+import 'package:re7al/screens/PromoScreen.dart';
+import 'package:re7al/screens/FullScreenMap.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,6 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => SplashScreens(),
+        'ChooseCity': (context) => ChooseCity(),
         'HomeScreen': (context) => HomeScreen(),
         'UserProfile': (context) => UserProfile(),
         'ExplorePlaces': (context) => ExplorePlaces(),
@@ -48,9 +53,11 @@ class MyApp extends StatelessWidget {
         'Settings': (context) => Settings(),
         'ModalBottomSheet': (context) => BottomSheetModal(),
         'Place': (context) => Place(),
+        'FullScreenMap': (context) => FullScreenMap(),
         'ContactUs': (context) => ContactUs(),
         'FAQ': (context) => FAQ(),
         'AppNotf': (context) => AppNotf(),
+        'BDContent': (context) => BDContent(),
       },
     );
   }

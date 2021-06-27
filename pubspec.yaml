@@ -63,6 +63,7 @@ flutter:
     - images/bestPlaces2.png
     - images/bestPlaces3.png
     - images/bestPlaces4.png
+    - images/blurryMap.jpeg
     - images/bgcolor.png
     - images/bg.jpg
     - images/bg1.jpg
@@ -70,6 +71,9 @@ flutter:
     - images/bg3.jpg
     - images/bg4.jpg
     - images/baliCity.png
+    - images/Cash.png
+    - images/MasterCard.png
+    - images/Visa.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

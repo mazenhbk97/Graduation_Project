@@ -81,7 +81,7 @@ class _Home_ContentsState extends State<Home_Contents> {
                       HS_Icons(
                         HSicon: Icon(Icons.museum_outlined),
                         HScolor: Colors.blue,
-                        HSnavigator: 'test',
+                        HSnavigator: 'BDContent',
                         HSname: 'Tourism',
                       ),
                       SizedBox(

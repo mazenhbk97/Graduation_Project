@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int CurrentIndex = 0;
+  int CurrentIndex = 2;
   List<Widget> screens = [
     Home_Contents(),
     Favorites(),

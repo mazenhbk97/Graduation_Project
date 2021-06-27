@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:re7al/Widgets/MyAppBar.dart';
 
@@ -32,8 +31,14 @@ class _SideMenuState extends State<SideMenu> {
                     onTap: iconTap,
                     child: CircleAvatar(foregroundImage: PpImg, maxRadius: 50),
                   ),
-                  accountName: Text('Account Name'),
-                  accountEmail: Text('Account_Email@gmail.com'),
+                  accountName: GestureDetector(
+                    child: Text('Account Name'),
+                    onTap: iconTap,
+                  ),
+                  accountEmail: GestureDetector(
+                    child: Text('Account_Email@gmail.com'),
+                    onTap: iconTap,
+                  ),
                 ),
                 ListTile(
                   leading: Icon(Icons.home_outlined),

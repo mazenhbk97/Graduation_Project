@@ -5,6 +5,7 @@ import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/MyAppBar.dart';
 import 'package:re7al/Widgets/Place_Card.dart';
 import 'package:re7al/Widgets/Place_StoryCard.dart';
+import 'package:re7al/screens/SideMenu.dart';
 
 class ExplorePlaces extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
           ),
         ),
       ),
+      drawer: SideMenu(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

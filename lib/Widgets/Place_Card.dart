@@ -92,6 +92,33 @@ class _Place_CardState extends State<Place_Card> {
                     ],
                   ),
                 ),
+                Positioned(
+                  top: 0,
+                  left: 10,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      color: Colors.red.withOpacity(0.8),
+                    ),
+                    width: 40,
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    child: Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                    ),
+                    // child: Text(
+                    //   card1_name,
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     color: Colors.white,
+                    //   ),
+                    //   softWrap: true,
+                    //   overflow: TextOverflow.fade,
+                    // ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -172,6 +199,33 @@ class _Place_CardState extends State<Place_Card> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 10,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      color: Colors.red.withOpacity(0.8),
+                    ),
+                    width: 40,
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    child: Icon(
+                      Icons.grass_outlined,
+                      color: Colors.white,
+                    ),
+                    // child: Text(
+                    //   card1_name,
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     color: Colors.white,
+                    //   ),
+                    //   softWrap: true,
+                    //   overflow: TextOverflow.fade,
+                    // ),
                   ),
                 ),
               ],
