@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Map extends StatefulWidget {
-  const Map({Key key}) : super(key: key);
+  double lat, long;
+  Map({this.lat, this.long});
 
   @override
   _MapState createState() => _MapState();
@@ -57,7 +58,7 @@ class _MapState extends State<Map> {
                 marker.add(
                   Marker(
                       markerId: MarkerId('2'),
-                      position: LatLng(30.0131, 31.2089)),
+                      position: LatLng(widget.lat, widget.long)),
                 );
               },
             );

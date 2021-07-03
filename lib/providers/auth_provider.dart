@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:re7al/data_models/user.dart';
 import 'package:re7al/helpers/http_exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,8 +19,11 @@ class AuthProvider with ChangeNotifier {
 
   Position position;
 
-  bool get isAuth {
-    return token != null;
+  User _user;
+
+  User get user {
+    print("user: $_user");
+    return _user;
   }
 
   String get userId {
@@ -25,6 +31,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   String get token {
+    print("token: $_token");
     return _token;
   }
 
@@ -55,10 +62,10 @@ class AuthProvider with ChangeNotifier {
       final response = await http.post(url,
           headers: {'content-type': 'application/json'},
           body: urlSeg == 'login'
-              ? {
+              ? jsonEncode({
                   'email': email,
                   'password': password,
-                }
+                })
               : jsonEncode(register));
       final responseData = jsonDecode(response.body);
       if (responseData['error'] != null) {
@@ -66,10 +73,10 @@ class AuthProvider with ChangeNotifier {
       }
       _token = responseData['token'];
 
-      notifyListeners();
       final prefs = await SharedPreferences.getInstance();
-
       prefs.setString('token', _token);
+      _token = prefs.getString('token');
+      notifyListeners();
     } catch (e) {
       // print("##### ${e.toString()}");
       throw e;
@@ -90,31 +97,62 @@ class AuthProvider with ChangeNotifier {
         desiredAccuracy: LocationAccuracy.bestForNavigation);
   }
 
-  // Future<bool> tryAutoLogIn() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   if (!prefs.containsKey('userData')) {
-  //     return false;
-  //   }
-  //   final extractedUserData =
-  //       json.decode(prefs.getString('userData')) as Map<String, Object>;
-  //   final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
+  Future<bool> tryAutoLogIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('token')) {
+      return false;
+    }
+    _token = prefs.getString('token');
 
-  //   if (expiryDate.isBefore(DateTime.now())) {
-  //     return false;
-  //   }
-  //   _token = extractedUserData['token'];
-  //   _userId = extractedUserData['userId'];
-  //   _expiryDate = expiryDate;
-  //   notifyListeners();
-  //   _autoLogout();
-  //   return true;
-  // }
+    return true;
+  }
 
-  // void _autoLogout() {
-  //   if (_authTimer != null) {
-  //     _authTimer.cancel();
-  //   }
-  //   final timeToExpire = _expiryDate.difference(DateTime.now()).inSeconds;
-  //   _authTimer = Timer(Duration(seconds: timeToExpire), logout);
-  // }
+  Future<void> editProfile(
+      {String name,
+      File img,
+      @required String token,
+      @required String type}) async {
+    final url = 'https://rehalapp2021.herokuapp.com/users/edit';
+    final file =
+        MultipartFile(img.openRead(), await img.length(), filename: img.path);
+    FormData formData = FormData.fromMap({'image': file});
+    Dio dio = Dio();
+    dio.options.headers['auth-token'] = token;
+    final response = await dio.put(
+      url,
+      data: formData,
+    );
+    final responseData = response.data as Map<String, dynamic>;
+    print("responseData: ${response.data.runtimeType}");
+    _user = User.fromMap(responseData);
+    print("use:: ${_user.name}");
+    notifyListeners();
+  }
+
+  Future<User> getProfile() async {
+    final url = Uri.parse('https://rehalapp2021.herokuapp.com/users/profile');
+    final pref = await SharedPreferences.getInstance();
+    String token = pref.getString('token');
+    _token = token;
+    try {
+      final response = await http.get(url, headers: {'auth-token': _token});
+      final responseData = jsonDecode(response.body) as Map<String, dynamic>;
+      print(responseData);
+
+      _user = User.fromMap(responseData);
+      print("use:: ${_user.name}");
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+    return _user;
+
+    // void _autoLogout() {
+    //   if (_authTimer != null) {
+    //     _authTimer.cancel();
+    //   }
+    //   final timeToExpire = _expiryDate.difference(DateTime.now()).inSeconds;
+    //   _authTimer = Timer(Duration(seconds: timeToExpire), logout);
+    // }
+  }
 }

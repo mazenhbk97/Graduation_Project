@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:re7al/providers/auth_provider.dart';
+import 'package:re7al/providers/places_provider.dart';
 import 'package:re7al/screens/AppNotf.dart';
 import 'package:re7al/screens/Clubs.dart';
 import 'package:re7al/screens/ExplorePlaces.dart';
@@ -29,8 +30,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (ctx) => AuthProvider(),
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: AuthProvider()),
+          ChangeNotifierProvider.value(value: PlacesProvider())
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           routes: {
@@ -50,7 +54,7 @@ class MyApp extends StatelessWidget {
             'SideMenu': (context) => SideMenu(),
             'Settings': (context) => Settings(),
             'ModalBottomSheet': (context) => BottomSheetModal(),
-            'Place': (context) => Place(),
+            Place.routeName: (context) => Place(),
             'ContactUs': (context) => ContactUs(),
             'FAQ': (context) => FAQ(),
             'AppNotf': (context) => AppNotf(),

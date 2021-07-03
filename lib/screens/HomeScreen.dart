@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/Home_Contents.dart';
+import 'package:re7al/providers/auth_provider.dart';
 import 'package:re7al/screens/Favorites.dart';
+import 'package:re7al/screens/Login.dart';
+import 'package:re7al/screens/UserProfile.dart';
 import 'ExplorePlaces.dart';
 import 'Favorites.dart';
-import 'UserProfile.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,12 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  initState() {
+    Future.delayed(Duration.zero).then((_) async =>
+        Provider.of<AuthProvider>(context, listen: false).tryAutoLogIn());
+    super.initState();
+  }
+
   int CurrentIndex = 0;
   List<Widget> screens = [
     Home_Contents(),
     Favorites(),
     ExplorePlaces(),
-    UserProfile(),
+    UserProfile()
   ];
 
   @override

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/Favorite_Card.dart';
 import 'package:re7al/Widgets/MyAppBar.dart';
 import 'package:re7al/Widgets/Place_Card.dart';
+import 'package:re7al/data_models/place.dart';
+import 'package:re7al/providers/places_provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class Favorites extends StatefulWidget {
@@ -74,6 +77,7 @@ class _FavoritesState extends State<Favorites> {
                 Expanded(
                   child: TabBarView(
                     children: [
+                      SavedPlaces('Overall'),
                       SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Padding(
@@ -82,25 +86,21 @@ class _FavoritesState extends State<Favorites> {
                             children: [
                               Favorite_Card(
                                 CardName: 'pyramids',
-                                CardDate: '22 mai 2021 ',
                                 CardRating: 4.9,
                                 CardReviews: 19,
                               ),
                               Favorite_Card(
                                 CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
                                 CardRating: 4.9,
                                 CardReviews: 19,
                               ),
                               Favorite_Card(
                                 CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
                                 CardRating: 4.9,
                                 CardReviews: 19,
                               ),
                               Favorite_Card(
                                 CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
                                 CardRating: 4.9,
                                 CardReviews: 19,
                               ),
@@ -108,74 +108,7 @@ class _FavoritesState extends State<Favorites> {
                           ),
                         ),
                       ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021 ',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021 ',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardDate: '22 mai 2021',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      SavedPlaces('new'),
                     ],
                   ),
                 ),
@@ -185,5 +118,37 @@ class _FavoritesState extends State<Favorites> {
         ),
       ),
     );
+  }
+}
+
+class SavedPlaces extends StatelessWidget {
+  String urlSeg;
+  SavedPlaces(this.urlSeg);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: FutureBuilder<List<PlaceModel>>(
+            future: Provider.of<PlacesProvider>(context, listen: false)
+                .getSavedPlaces(urlSeg),
+            builder: (ctx, snapshot) =>
+                snapshot.connectionState == ConnectionState.waiting
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Column(
+                        children: snapshot.data
+                            .map((e) => Favorite_Card(
+                                  CardName: e.name,
+                                  CardRating: double.parse(e.rating.toString()),
+                                  CardReviews: e.rating,
+                                  id: e.id,
+                                ))
+                            .toList()),
+          ),
+        ));
   }
 }

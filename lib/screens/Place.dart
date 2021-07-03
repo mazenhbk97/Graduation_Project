@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Models/Places.dart';
 import 'package:re7al/Widgets/Constants.dart';
-import 'package:re7al/Widgets/Favorite_Card.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:re7al/providers/places_provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:re7al/Widgets/Map.dart';
 
 class Place extends StatefulWidget {
-  const Place({Key key}) : super(key: key);
+  static const routeName = '/place';
 
   @override
   _PlaceState createState() => _PlaceState();
@@ -19,7 +20,6 @@ class Place extends StatefulWidget {
 class _PlaceState extends State<Place> {
   TabController _tabController;
 
-  bool fav = true;
   @override
   void dispose() {
     super.dispose();
@@ -28,6 +28,10 @@ class _PlaceState extends State<Place> {
 
   @override
   Widget build(BuildContext context) {
+    final place =
+        Provider.of<PlacesProvider>(context, listen: false).selectedPlace;
+
+    print("place $place");
     return DefaultTabController(
       length: 2,
       child: SafeArea(
@@ -47,7 +51,7 @@ class _PlaceState extends State<Place> {
                         bottomLeft: Radius.circular(80.0),
                       ),
                       image: DecorationImage(
-                        image: const AssetImage('images/baliCity.png'),
+                        image: NetworkImage(place.image),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -112,20 +116,11 @@ class _PlaceState extends State<Place> {
                                 children: [
                                   RichText(
                                     text: TextSpan(
-                                      text: 'Bali ',
+                                      text: place.name,
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 50,
                                           fontWeight: FontWeight.bold),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: 'island',
-                                          style: TextStyle(
-                                            color: font_color,
-                                            fontSize: 30,
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                   ),
                                   CircleAvatar(
@@ -139,14 +134,14 @@ class _PlaceState extends State<Place> {
                                       child: IconButton(
                                         iconSize: 30,
                                         icon: Icon(
-                                          fav
-                                              ? Icons.favorite_outline_outlined
-                                              : Icons.favorite,
+                                          place.isFav
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline_outlined,
                                           color: Colors.red,
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            fav = !fav;
+                                            place.isFav = !place.isFav;
                                           });
                                         },
                                       ),
@@ -161,7 +156,7 @@ class _PlaceState extends State<Place> {
                                 RatingBar.builder(
                                   allowHalfRating: true,
                                   itemSize: 25,
-                                  initialRating: 3,
+                                  initialRating: place.rating.toDouble(),
                                   minRating: 1,
                                   direction: Axis.horizontal,
                                   itemCount: 5,
@@ -182,7 +177,7 @@ class _PlaceState extends State<Place> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(2),
                                     child: Text(
-                                      '3.5 Stars',
+                                      '${place.rating} Stars',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
@@ -196,7 +191,7 @@ class _PlaceState extends State<Place> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '29 Reviews ',
+                                    '${place.reviews} Reviews ',
                                     style: TextStyle(color: font_color),
                                   ),
                                 ],
@@ -244,11 +239,9 @@ class _PlaceState extends State<Place> {
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: [
-                                  Story(),
-                                  Story(),
-                                ],
-                              ),
+                                  children: place.media
+                                      .map((e) => Story(e))
+                                      .toList()),
                             ),
                             // Padding(
                             //   padding: const EdgeInsets.only(
@@ -366,7 +359,10 @@ class _PlaceState extends State<Place> {
                       ),
                     ),
                     Container(
-                      child: Map(),
+                      child: Map(
+                        lat: place.coordinates[1],
+                        long: place.coordinates[0],
+                      ),
                     ),
                     // SingleChildScrollView(
                     //   scrollDirection: Axis.vertical,

@@ -14,7 +14,7 @@ class MyAppBar extends StatefulWidget {
 
 class _MyAppBarState extends State<MyAppBar> {
   void iconTap() {
-    Navigator.pushNamed(context, 'Login');
+    Navigator.pushNamed(context, 'UserProfile');
   }
 
   @override
@@ -45,14 +45,14 @@ class _MyAppBarState extends State<MyAppBar> {
         ),
         actions: [
           GestureDetector(
-            onTap: iconTap,
+            onTap: () => iconTap(),
             child: CircleAvatar(
               foregroundImage: AssetImage(
                 'images/bestPlaces.png',
               ),
               maxRadius: 35,
             ),
-          ),
+          )
         ],
       ),
     );
