@@ -6,6 +6,7 @@ import 'package:re7al/Widgets/MyAppBar.dart';
 import 'package:re7al/Widgets/Place_Card.dart';
 import 'package:re7al/Widgets/Place_StoryCard.dart';
 import 'package:re7al/screens/SideMenu.dart';
+import 'package:re7al/screens/ExploreAlert.dart';
 
 class ExplorePlaces extends StatefulWidget {
   @override
@@ -14,6 +15,10 @@ class ExplorePlaces extends StatefulWidget {
 
 class _ExplorePlacesState extends State<ExplorePlaces> {
   String CityName;
+  dialogalert() {
+    showDialog<void>(context: context, builder: (context) => ExploreAlert());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +48,7 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 Container(
                     margin: EdgeInsets.only(top: 20, right: 15, left: 15),
                     child: GestureDetector(
+                      onTap: dialogalert,
                       child: Text(
                         '$CityName',
                         style: TextStyle(fontSize: 20, color: font_color),
