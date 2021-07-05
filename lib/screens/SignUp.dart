@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
+import 'package:re7al/providers/auth_provider.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -122,7 +126,7 @@ class FormScreenState extends State<SignUp> {
       validator: (String value) {
         if (value.isEmpty) {
           return 'Password is Required';
-        } else if (value != _pass) {
+        } else if (value != _pass.text) {
           return 'Password does not match';
         }
 
@@ -187,29 +191,31 @@ class FormScreenState extends State<SignUp> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Column(
-                      children: [
-                        _buildFirstName(),
-                        _buildLastName(),
-                        _buildEmail(),
-                        _buildPassword(),
-                        _buildconfirmPassword(),
-                        SizedBox(height: 40),
+                    child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            _buildFirstName(),
+                            _buildLastName(),
+                            _buildEmail(),
+                            _buildPassword(),
+                            _buildconfirmPassword(),
+                            SizedBox(height: 40),
 
-                        // _formKey.currentState.save();
-                        //
-                        // print(_name);
-                        // print(_email);
-                        // print(_phoneNumber);
-                        // print(_url);
-                        // print(_password);
-                        // print(_calories);
+                            // _formKey.currentState.save();
+                            //
+                            // print(_name);
+                            // print(_email);
+                            // print(_phoneNumber);
+                            // print(_url);
+                            // print(_password);
+                            // print(_calories);
 
-                        //Send to API
-                        //  },
-                        //  ),
-                      ],
-                    ),
+                            //Send to API
+                            //  },
+                            //  ),
+                          ],
+                        )),
                   ),
                   Container(
                     width: 280,
@@ -223,11 +229,16 @@ class FormScreenState extends State<SignUp> {
                         style: TextStyle(color: Colors.white, fontSize: 25),
                         //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        ;
+                        _formKey.currentState.save();
+                        await Provider.of<AuthProvider>(context, listen: false)
+                            .signUp(_email, _password, _firstname + _lastname,
+                                'Arish');
+                        Navigator.popUntil(
+                            context, ModalRoute.withName('HomeScreen'));
                       },
                     ),
                   ),

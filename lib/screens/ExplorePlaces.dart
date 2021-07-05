@@ -78,10 +78,10 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 viewportFraction: 0.66,
               ),
               items: [
-                Story(),
-                Story(),
-                Story(),
-                Story(),
+                Story(''),
+                Story(''),
+                Story(''),
+                Story(''),
               ],
             ),
             Row(

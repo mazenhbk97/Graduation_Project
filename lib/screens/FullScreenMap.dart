@@ -6,6 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:re7al/Widgets/Constants.dart';
 
 class FullScreenMap extends StatefulWidget {
+  double lat, lang;
+  FullScreenMap(this.lang, this.lat);
   @override
   _FullScreenMapState createState() => _FullScreenMapState();
 }
@@ -56,7 +58,7 @@ class _FullScreenMapState extends State<FullScreenMap> {
               marker.add(
                 Marker(
                     markerId: MarkerId('2'),
-                    position: LatLng(30.0131, 31.2089)),
+                    position: LatLng(widget.lat, widget.lang)),
               );
             },
           );

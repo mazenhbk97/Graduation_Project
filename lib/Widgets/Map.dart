@@ -1,11 +1,10 @@
-import 'dart:collection';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:re7al/Widgets/Constants.dart';
+import 'package:re7al/screens/FullScreenMap.dart';
 
 class Map extends StatefulWidget {
-  const Map({Key key}) : super(key: key);
+  double lat, long;
+  Map({this.lat, this.long});
 
   @override
   _MapState createState() => _MapState();
@@ -54,9 +53,8 @@ class _MapState extends State<Map> {
                 //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                setState(() {
-                  Navigator.pushNamed(context, 'FullScreenMap');
-                });
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => FullScreenMap(widget.long, widget.lat)));
               },
             ),
           ),

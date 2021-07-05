@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:re7al/Widgets/BDContent.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
+import 'package:re7al/providers/auth_provider.dart';
+import 'package:re7al/providers/places_provider.dart';
 import 'package:re7al/screens/AppNotf.dart';
 import 'package:re7al/screens/Clubs.dart';
 import 'package:re7al/screens/ExplorePlaces.dart';
@@ -17,7 +20,6 @@ import 'package:re7al/screens/ForgotPass.dart';
 import 'package:re7al/screens/SignUp.dart';
 import 'package:re7al/screens/test.dart';
 import 'package:re7al/screens/SideMenu.dart';
-import 'package:re7al/screens/Settings.dart';
 import 'screens/HomeScreen.dart';
 import 'package:re7al/screens/Place.dart';
 import 'package:re7al/screens/ContactUs.dart';
@@ -32,33 +34,36 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context) => SplashScreens(),
-        'ChooseCity': (context) => ChooseCity(),
-        'HomeScreen': (context) => HomeScreen(),
-        'UserProfile': (context) => UserProfile(),
-        'ExplorePlaces': (context) => ExplorePlaces(),
-        'Favorites': (context) => Favorites(),
-        'Museums': (context) => Museums(),
-        'Food': (context) => Food(),
-        'Hospital': (context) => Hospital(),
-        'Clubs': (context) => Clubs(),
-        'Login': (context) => Login(),
-        'SignUp': (context) => SignUp(),
-        'ForgotPass': (context) => ForgotPass(),
-        'test': (context) => test(),
-        'SideMenu': (context) => SideMenu(),
-        'Settings': (context) => Settings(),
-        'ModalBottomSheet': (context) => BottomSheetModal(),
-        'Place': (context) => Place(),
-        'FullScreenMap': (context) => FullScreenMap(),
-        'ContactUs': (context) => ContactUs(),
-        'FAQ': (context) => FAQ(),
-        'AppNotf': (context) => AppNotf(),
-        'BDContent': (context) => BDContent(),
-      },
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: AuthProvider()),
+          ChangeNotifierProvider.value(value: PlacesProvider())
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          routes: {
+            '/': (context) => SplashScreens(),
+            'HomeScreen': (context) => HomeScreen(),
+            'UserProfile': (context) => UserProfile(),
+            'ExplorePlaces': (context) => ExplorePlaces(),
+            'Favorites': (context) => Favorites(),
+            'Museums': (context) => Museums(),
+            'Food': (context) => Food(),
+            'Hospital': (context) => Hospital(),
+            'Clubs': (context) => Clubs(),
+            'Login': (context) => Login(),
+            'SignUp': (context) => SignUp(),
+            'ForgotPass': (context) => ForgotPass(),
+            'test': (context) => test(),
+            'SideMenu': (context) => SideMenu(),
+            'Settings': (context) => Settings(),
+            'BDContent': (context) => BDContent(),
+            'ModalBottomSheet': (context) => BottomSheetModal(),
+            Place.routeName: (context) => Place(),
+            'ContactUs': (context) => ContactUs(),
+            'FAQ': (context) => FAQ(),
+            'AppNotf': (context) => AppNotf(),
+          },
+        ));
   }
 }

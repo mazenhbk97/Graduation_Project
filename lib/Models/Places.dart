@@ -151,6 +151,8 @@ class SearchBar extends StatelessWidget {
 }
 
 class Story extends StatelessWidget {
+  String imageUrl;
+  Story(this.imageUrl);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -162,20 +164,12 @@ class Story extends StatelessWidget {
           height: 160,
           width: 120,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.blueAccent,
-          ),
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                  image: NetworkImage(imageUrl), fit: BoxFit.cover)),
         ),
         SizedBox(
           width: 15,
-        ),
-        Container(
-          height: 160,
-          width: 120,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.blueGrey,
-          ),
         ),
       ],
     );

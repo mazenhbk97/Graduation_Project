@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/Home_Contents.dart';
+import 'package:re7al/providers/auth_provider.dart';
 import 'package:re7al/screens/Favorites.dart';
+import 'package:re7al/screens/Login.dart';
+import 'package:re7al/screens/UserProfile.dart';
 import 'ExplorePlaces.dart';
 import 'Favorites.dart';
-import 'UserProfile.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,12 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int CurrentIndex = 2;
+  initState() {
+    Future.delayed(Duration.zero).then((_) async =>
+        Provider.of<AuthProvider>(context, listen: false).tryAutoLogIn());
+    super.initState();
+  }
+
+  int currentIndex = 0;
   List<Widget> screens = [
     Home_Contents(),
     Favorites(),
     ExplorePlaces(),
-    UserProfile(),
+    UserProfile()
   ];
 
   @override
@@ -27,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.8),
       child: Scaffold(
-        body: screens[CurrentIndex],
+        body: screens[currentIndex],
         extendBodyBehindAppBar: true,
         extendBody: true,
         bottomNavigationBar: ClipRRect(
@@ -37,12 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            currentIndex: CurrentIndex,
+            currentIndex: currentIndex,
             showSelectedLabels: false,
             showUnselectedLabels: false,
             onTap: (index) {
               setState(() {
-                CurrentIndex = index;
+                currentIndex = index;
               });
             },
             items: [
@@ -51,16 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Chip(
                     avatar: Icon(
                       Icons.home_outlined,
-                      color: CurrentIndex == 0 ? Colors.white : font_color,
+                      color: currentIndex == 0 ? Colors.white : font_color,
                     ),
-                    label: CurrentIndex == 0
+                    label: currentIndex == 0
                         ? Text(
                             'Home',
                             style: TextStyle(color: Colors.white),
                           )
                         : Text(''),
                     backgroundColor:
-                        CurrentIndex == 0 ? bottom_nav_bar : Colors.transparent,
+                        currentIndex == 0 ? bottom_nav_bar : Colors.transparent,
                   ),
                 ),
                 //label: '',
@@ -70,16 +79,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Chip(
                   avatar: Icon(
                     Icons.favorite_border_outlined,
-                    color: CurrentIndex == 1 ? Colors.white : font_color,
+                    color: currentIndex == 1 ? Colors.white : font_color,
                   ),
-                  label: CurrentIndex == 1
+                  label: currentIndex == 1
                       ? Text(
                           'Fav',
                           style: TextStyle(color: Colors.white),
                         )
                       : Text(''),
                   backgroundColor:
-                      CurrentIndex == 1 ? bottom_nav_bar : Colors.transparent,
+                      currentIndex == 1 ? bottom_nav_bar : Colors.transparent,
                 ),
                 title: new Text(''),
               ),
@@ -87,16 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Chip(
                   avatar: Icon(
                     Icons.explore_outlined,
-                    color: CurrentIndex == 2 ? Colors.white : font_color,
+                    color: currentIndex == 2 ? Colors.white : font_color,
                   ),
-                  label: CurrentIndex == 2
+                  label: currentIndex == 2
                       ? Text(
                           'Explore',
                           style: TextStyle(color: Colors.white),
                         )
                       : Text(''),
                   backgroundColor:
-                      CurrentIndex == 2 ? bottom_nav_bar : Colors.transparent,
+                      currentIndex == 2 ? bottom_nav_bar : Colors.transparent,
                 ),
                 title: new Text(''),
               ),
@@ -104,16 +113,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Chip(
                   avatar: Icon(
                     Icons.person_outline_rounded,
-                    color: CurrentIndex == 3 ? Colors.white : font_color,
+                    color: currentIndex == 3 ? Colors.white : font_color,
                   ),
-                  label: CurrentIndex == 3
+                  label: currentIndex == 3
                       ? Text(
                           'Profile',
                           style: TextStyle(color: Colors.white),
                         )
                       : Text(''),
                   backgroundColor:
-                      CurrentIndex == 3 ? bottom_nav_bar : Colors.transparent,
+                      currentIndex == 3 ? bottom_nav_bar : Colors.transparent,
                 ),
                 title: new Text(''),
               ),

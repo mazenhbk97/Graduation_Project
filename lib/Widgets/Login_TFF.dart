@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
+// ignore: camel_case_types
+// ignore: must_be_immutable
 class Login_TFF extends StatefulWidget {
+  Function saveName;
+  Function savePassword;
+
+  Login_TFF({@required this.saveName, @required this.savePassword});
+
   @override
   _Login_TFFState createState() => _Login_TFFState();
 }
@@ -35,8 +42,10 @@ class _Login_TFFState extends State<Login_TFF> {
 
         return null;
       },
-      onSaved: (String value) {
+      onFieldSubmitted: (String value) {
+        print("hello pass :$value");
         _password = value;
+        widget.savePassword(_password);
       },
     );
   }
@@ -58,8 +67,11 @@ class _Login_TFFState extends State<Login_TFF> {
 
         return null;
       },
-      onSaved: (String value) {
+      onFieldSubmitted: (String value) {
         _email = value;
+        print("hello mail :$value");
+
+        widget.saveName(_email);
       },
     );
   }
