@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:re7al/Models/city.dart';
 import 'package:re7al/Widgets/Constants.dart';
+import 'package:re7al/data_models/place.dart';
+import 'package:re7al/providers/city_provider.dart';
+import 'package:re7al/screens/ChooseCity.dart';
+import 'package:re7al/screens/ExploreAlert.dart';
 import 'package:re7al/screens/SideMenu.dart';
+import 'package:re7al/providers/places_provider.dart';
 
 import 'HS_Icons.dart';
 import 'MyAppBar.dart';
@@ -14,132 +21,174 @@ class Home_Contents extends StatefulWidget {
 }
 
 class _Home_ContentsState extends State<Home_Contents> {
-  String CityName;
+  initState() {
+    super.initState();
+    Future.delayed(Duration.zero).then((_) async {
+      await Provider.of<CityProvider>(context, listen: false).fetchCities();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    City city = Provider.of<CityProvider>(context).selectedCity;
+    print("build");
+
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
-        child: MyAppBar(
-          MyABicon: Icon(
-            Icons.menu_rounded,
-            size: 40,
-          ),
-        ),
-      ),
-      drawer: SideMenu(),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/bgcolor.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 20, left: 15),
-                      child: Text(
-                        'Welcome in ',
-                        style: TextStyle(fontSize: 20, color: font_color),
-                      ),
-                    ),
-                    Container(
-                        margin: EdgeInsets.only(top: 20, right: 15, left: 15),
-                        child: GestureDetector(
-                          child: Text(
-                            '$CityName',
-                            style: TextStyle(fontSize: 20, color: font_color),
-                          ),
-                        )),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 25, left: 15, bottom: 10),
-                      child: Text(
-                        'Type of services',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: font_color,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      HS_Icons(
-                        HSicon: Icon(Icons.museum_outlined),
-                        HScolor: Colors.blue,
-                        HSnavigator: 'BDContent',
-                        HSname: 'Tourism',
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      HS_Icons(
-                        HSicon: Icon(Icons.restaurant_outlined),
-                        HScolor: Colors.purple,
-                        HSnavigator: 'test',
-                        HSname: 'Food',
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      HS_Icons(
-                        HSicon: Icon(Icons.local_hospital),
-                        HScolor: Colors.deepOrangeAccent,
-                        HSnavigator: 'Hospital',
-                        HSname: 'Hospital',
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      HS_Icons(
-                        HSicon: Icon(Icons.grass_rounded),
-                        HScolor: Colors.green,
-                        HSnavigator: 'ModalBottomSheet',
-                        HSname: 'Clubs',
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 35,
-                        left: 15,
-                        bottom: 20,
-                      ),
-                      child: Text(
-                        'Best places ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: font_color,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Place_Card(),
-                //Place_Card(),
-              ],
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(70),
+          child: MyAppBar(
+            MyABicon: Icon(
+              Icons.menu_rounded,
+              size: 40,
             ),
           ),
         ),
-      ),
-    );
+        drawer: SideMenu(),
+        body: city == null
+            ? ChooseCity()
+            : FutureBuilder<List<PlaceModel>>(
+                future: Provider.of<PlacesProvider>(context, listen: false)
+                    .getCityPlaces(city.id),
+                builder: (ctx, snapshot) => snapshot.connectionState ==
+                        ConnectionState.waiting
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('images/bgcolor.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Container(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (ctx) => ExploreAlert());
+                                      },
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.only(top: 20, left: 15),
+                                        child: Text(
+                                          city == null
+                                              ? 'Click to choose a city !'
+                                              : "Welcome in",
+                                          style: TextStyle(
+                                              fontSize: 20, color: font_color),
+                                        ),
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: city == null ? false : true,
+                                      child: Container(
+                                          margin: EdgeInsets.only(
+                                              top: 20, right: 15, left: 15),
+                                          child: GestureDetector(
+                                            child: Text(
+                                              city == null
+                                                  ? ' '
+                                                  : '${city.name}',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: font_color),
+                                            ),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 25, left: 15, bottom: 10),
+                                      child: Text(
+                                        'Type of services',
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold,
+                                          color: font_color,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: 10, left: 10, right: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      HS_Icons(
+                                        HSicon: Icon(Icons.museum_outlined),
+                                        HScolor: Colors.blue,
+                                        HSnavigator: 'BDContent',
+                                        HSname: 'Tourism',
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      HS_Icons(
+                                        HSicon: Icon(Icons.restaurant_outlined),
+                                        HScolor: Colors.purple,
+                                        HSnavigator: 'test',
+                                        HSname: 'Food',
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      HS_Icons(
+                                        HSicon: Icon(Icons.local_hospital),
+                                        HScolor: Colors.deepOrangeAccent,
+                                        HSnavigator: 'Hospital',
+                                        HSname: 'Hospital',
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      HS_Icons(
+                                        HSicon: Icon(Icons.grass_rounded),
+                                        HScolor: Colors.green,
+                                        HSnavigator: 'ModalBottomSheet',
+                                        HSname: 'Clubs',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: 35,
+                                        left: 15,
+                                        bottom: 20,
+                                      ),
+                                      child: Text(
+                                        'Best places ',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: font_color,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                    height: 500,
+                                    child: Place_Card(snapshot.data)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+              ));
   }
 }

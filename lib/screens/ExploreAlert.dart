@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:provider/provider.dart';
+import 'package:re7al/Models/city.dart';
+import 'package:re7al/providers/city_provider.dart';
 
 class ExploreAlert extends StatefulWidget {
   @override
@@ -6,38 +10,63 @@ class ExploreAlert extends StatefulWidget {
 }
 
 class _ExploreAlertState extends State<ExploreAlert> {
+  bool selected = false;
+
+  var controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    List<City> cities = Provider.of<CityProvider>(context).cities;
+    List<String> _suggestions = cities.map((e) => e.name).toList();
+    print("suggestions ${cities.toString()}");
+    FocusNode focusNode = FocusNode();
     return AlertDialog(
-      title: Text('Select your city'),
-      contentPadding: EdgeInsets.zero,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (int i = 1; i <= 3; i++)
-            ListTile(
-              title: Text(
-                'option $i',
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle1
-                    .copyWith(color: Colors.blue),
-              ),
-              leading: Radio(
-                value: i,
-                groupValue: 1,
-                onChanged: (_) {},
-              ),
-            ),
-        ],
-      ),
-      actions: [
-        FlatButton(
-          textColor: Colors.blue,
-          onPressed: () => Navigator.pop(context),
-          child: Text('ACTION 1'),
-        ),
-      ],
-    );
+        title: Text('Select your city'),
+        contentPadding: EdgeInsets.zero,
+        content: TypeAheadField<String>(
+            noItemsFoundBuilder: (context) => new ListTile(
+                  title: new Text('Your input did not match any station !'),
+                ),
+            suggestionsCallback: (input) {
+              return _suggestions.where((element) =>
+                  element.toLowerCase().contains(input.toLowerCase()));
+            },
+            onSuggestionSelected: (value) {
+              setState(() {
+                controller.text = value;
+                selected = true;
+                FocusScope.of(context).requestFocus(focusNode);
+              });
+            },
+            // itemFilter: (suggestion, input) =>
+            //     suggestion.toLowerCase().contains(input.toLowerCase()),
+            itemBuilder: (context, suggestion) => new Padding(
+                child: new ListTile(
+                  title: new Text(suggestion),
+                ),
+                padding: EdgeInsets.all(8.0)),
+            textFieldConfiguration: TextFieldConfiguration(
+                focusNode: focusNode,
+                controller: controller,
+                onSubmitted: (v) {
+                  if (!selected) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Please choose a city !"),
+                    ));
+                    return;
+                  }
+                  Provider.of<CityProvider>(context, listen: false)
+                      .selectCity(v);
+                  Navigator.of(context).pop();
+                },
+                style: TextStyle(color: Colors.black),
+                autofocus: true,
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    )))));
   }
 }

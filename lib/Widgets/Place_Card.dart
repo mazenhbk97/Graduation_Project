@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:re7al/Models/Places.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:math';
+import 'package:re7al/data_models/place.dart';
 
 class Place_Card extends StatefulWidget {
+  List<PlaceModel> places;
+  Place_Card(this.places);
   @override
   _Place_CardState createState() => _Place_CardState();
 }
@@ -18,7 +21,7 @@ class _Place_CardState extends State<Place_Card> {
 
   //String Place_name;
 
-  Widget _Card1(Image card1_img, String card1_name) {
+  Widget _Card1(String img, String name, num rate) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, 'Place');
@@ -34,9 +37,8 @@ class _Place_CardState extends State<Place_Card> {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: card1_img,
-                ),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(img == null ? '' : img)),
                 Positioned(
                   bottom: 20,
                   right: 30,
@@ -50,7 +52,7 @@ class _Place_CardState extends State<Place_Card> {
                     width: 140,
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: Text(
-                      card1_name,
+                      name,
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -81,7 +83,7 @@ class _Place_CardState extends State<Place_Card> {
                         top: 25,
                         right: 4,
                         child: Text(
-                          '3.5',
+                          '$rate',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.black,
@@ -239,37 +241,19 @@ class _Place_CardState extends State<Place_Card> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        _Card1(image1, 'Toursim'),
-                        _Card2(image3, 'Restaurant')
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        _Card2(image2, 'Restaurant'),
-                        _Card1(image4, 'Hospital')
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        child: StaggeredGridView.countBuilder(
+      physics: NeverScrollableScrollPhysics(),
+      crossAxisCount: 4,
+      itemCount: widget.places.length,
+      itemBuilder: (BuildContext context, int i) => _Card1(
+        widget.places[0].image,
+        widget.places[0].name,
+        widget.places[0].rating,
       ),
-    );
+      staggeredTileBuilder: (int index) =>
+          new StaggeredTile.count(2, index.isEven ? 2 : 1),
+      mainAxisSpacing: 4.0,
+      crossAxisSpacing: 4.0,
+    ));
   }
 }

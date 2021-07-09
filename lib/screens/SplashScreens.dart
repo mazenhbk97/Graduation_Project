@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:re7al/Widgets/Constants.dart';
-import 'package:re7al/screens/ExploreAlert.dart';
 
 class SplashScreens extends StatefulWidget {
   _SplashScreensState createState() => new _SplashScreensState();
@@ -45,8 +43,6 @@ class _SplashScreensState extends State<SplashScreens> {
             ),
             onPressed: () {
               Navigator.pushNamed(context, 'HomeScreen');
-              showDialog<void>(
-                  context: context, builder: (context) => ExploreAlert());
             },
           ),
         ),

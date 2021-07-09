@@ -15,9 +15,9 @@ class ExplorePlaces extends StatefulWidget {
 
 class _ExplorePlacesState extends State<ExplorePlaces> {
   String CityName;
-  dialogalert() {
-    showDialog<void>(context: context, builder: (context) => ExploreAlert());
-  }
+  // dialogalert() {
+  //   showDialog<void>(context: context, builder: (context) => ExploreAlert());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 Container(
                     margin: EdgeInsets.only(top: 20, right: 15, left: 15),
                     child: GestureDetector(
-                      onTap: dialogalert,
+                      // onTap: dialogalert,
                       child: Text(
                         '$CityName',
                         style: TextStyle(fontSize: 20, color: font_color),
@@ -103,9 +103,9 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 ),
               ],
             ),
-            Place_Card(),
-            Place_Card(),
-            Place_Card(),
+            // Place_Card(),
+            // Place_Card(),
+            // Place_Card(),
           ],
         ),
       ),

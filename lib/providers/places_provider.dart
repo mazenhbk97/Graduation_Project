@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PlacesProvider with ChangeNotifier {
   List<PlaceModel> _savedPlaces = [];
+  List<PlaceModel> _cityPlaces = [];
   PlaceModel _selectedPlace;
 
   void selectPlace(String id) {
@@ -36,7 +37,7 @@ class PlacesProvider with ChangeNotifier {
     } catch (e) {
       print("error: $e");
     }
-    return _savedPlaces;
+    return [..._savedPlaces];
   }
 
   Future<String> _getToken() async {
@@ -44,5 +45,23 @@ class PlacesProvider with ChangeNotifier {
 
     String token = prefs.getString('token');
     return token;
+  }
+
+  Future<List<PlaceModel>> getCityPlaces(String cityId) async {
+    Uri uri = Uri.parse('${Public.baseUrl}/places/cities/$cityId');
+    print("cityId: $cityId");
+
+    try {
+      final response = await http.get(uri);
+      print("response ${response.body}");
+      final responseData = jsonDecode(response.body)['docs'] as List<dynamic>;
+      print("data: ${responseData.runtimeType}");
+
+      _cityPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
+      notifyListeners();
+    } catch (e) {
+      print("error: $e");
+    }
+    return [..._cityPlaces];
   }
 }
