@@ -18,8 +18,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   initState() {
-    Future.delayed(Duration.zero).then((_) async =>
-        Provider.of<AuthProvider>(context, listen: false).tryAutoLogIn());
+    Future.delayed(Duration.zero).then((_) async {
+      Provider.of<AuthProvider>(context, listen: false).tryAutoLogIn();
+      Provider.of<AuthProvider>(context, listen: false).getProfile();
+    });
     super.initState();
   }
 

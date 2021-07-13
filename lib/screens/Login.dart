@@ -163,15 +163,20 @@ class _LoginState extends State<Login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.orangeAccent,
-                      child: Text(
-                        'G',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25),
+                    InkWell(
+                      onTap: () =>
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .googleSign(),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.orangeAccent,
+                        child: Text(
+                          'G',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25),
+                        ),
                       ),
                     ),
                     SizedBox(

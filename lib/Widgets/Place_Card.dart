@@ -38,7 +38,9 @@ class _Place_CardState extends State<Place_Card> {
               children: [
                 ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image.network(img == null ? '' : img)),
+                    child: img == null || img.endsWith("gif")
+                        ? image1
+                        : Image.network(img)),
                 Positioned(
                   bottom: 20,
                   right: 30,
@@ -81,7 +83,7 @@ class _Place_CardState extends State<Place_Card> {
                       ),
                       Positioned(
                         top: 25,
-                        right: 4,
+                        right: 10,
                         child: Text(
                           '$rate',
                           style: TextStyle(
@@ -246,9 +248,9 @@ class _Place_CardState extends State<Place_Card> {
       crossAxisCount: 4,
       itemCount: widget.places.length,
       itemBuilder: (BuildContext context, int i) => _Card1(
-        widget.places[0].image,
-        widget.places[0].name,
-        widget.places[0].rating,
+        widget.places[i].image,
+        widget.places[i].name,
+        widget.places[i].rating,
       ),
       staggeredTileBuilder: (int index) =>
           new StaggeredTile.count(2, index.isEven ? 2 : 1),

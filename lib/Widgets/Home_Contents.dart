@@ -24,6 +24,7 @@ class _Home_ContentsState extends State<Home_Contents> {
   initState() {
     super.initState();
     Future.delayed(Duration.zero).then((_) async {
+      print("fetching");
       await Provider.of<CityProvider>(context, listen: false).fetchCities();
     });
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:re7al/data_models/user.dart';
+import 'package:re7al/providers/auth_provider.dart';
 
 import 'Constants.dart';
 
@@ -46,12 +49,14 @@ class _MyAppBarState extends State<MyAppBar> {
         actions: [
           GestureDetector(
             onTap: () => iconTap(),
-            child: CircleAvatar(
-              foregroundImage: AssetImage(
-                'images/bestPlaces.png',
-              ),
-              maxRadius: 35,
-            ),
+            child: Selector<AuthProvider, User>(
+                selector: (ctx, authProv) => authProv.user,
+                builder: (ctx, user, _) => CircleAvatar(
+                      foregroundImage: NetworkImage(
+                        user == null ? "" : user.imgUrl,
+                      ),
+                      maxRadius: 35,
+                    )),
           )
         ],
       ),

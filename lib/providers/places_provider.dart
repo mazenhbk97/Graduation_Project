@@ -54,10 +54,11 @@ class PlacesProvider with ChangeNotifier {
     try {
       final response = await http.get(uri);
       print("response ${response.body}");
-      final responseData = jsonDecode(response.body)['docs'] as List<dynamic>;
+      final responseData = jsonDecode(response.body) as List<dynamic>;
       print("data: ${responseData.runtimeType}");
 
       _cityPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
+      print(_cityPlaces.toString());
       notifyListeners();
     } catch (e) {
       print("error: $e");

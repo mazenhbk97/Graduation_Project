@@ -9,8 +9,8 @@ class City {
     this.id = cityMap['id'];
     this.name = cityMap['name'];
     this.postalCode = cityMap['postalCode'];
-    this.services =
-        (cityMap['services'] as List<dynamic>).map((e) => e as int).toList();
+    // this.services =
+    //     (cityMap['services'] as List<dynamic>).map((e) => e as int).toList();
     this.image = cityMap['image'];
   }
 }

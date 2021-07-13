@@ -5,9 +5,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:re7al/data_models/user.dart';
 import 'package:re7al/helpers/http_exception.dart';
+import 'package:re7al/helpers/public.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -112,21 +114,25 @@ class AuthProvider with ChangeNotifier {
       File img,
       @required String token,
       @required String type}) async {
-    final url = 'https://rehalapp2021.herokuapp.com/users/edit';
-    final file =
-        MultipartFile(img.openRead(), await img.length(), filename: img.path);
-    FormData formData = FormData.fromMap({'image': file});
-    Dio dio = Dio();
-    dio.options.headers['auth-token'] = token;
-    final response = await dio.put(
-      url,
-      data: formData,
-    );
-    final responseData = response.data as Map<String, dynamic>;
-    print("responseData: ${response.data.runtimeType}");
-    _user = User.fromMap(responseData);
-    print("use:: ${_user.name}");
-    notifyListeners();
+    try {
+      final url = 'https://rehalapp2021.herokuapp.com/users/edit';
+      final file =
+          MultipartFile(img.openRead(), await img.length(), filename: img.path);
+      FormData formData = FormData.fromMap({'image': file});
+      Dio dio = Dio();
+      dio.options.headers['auth-token'] = token;
+      final response = await dio.put(
+        url,
+        data: formData,
+      );
+      final responseData = response.data as Map<String, dynamic>;
+      print("responseData: ${response.data.runtimeType}");
+      _user = User.fromMap(responseData);
+      print("use:: ${_user.name}");
+      notifyListeners();
+    } catch (e) {
+      print("error $e");
+    }
   }
 
   Future<User> getProfile() async {
@@ -154,5 +160,23 @@ class AuthProvider with ChangeNotifier {
     //   final timeToExpire = _expiryDate.difference(DateTime.now()).inSeconds;
     //   _authTimer = Timer(Duration(seconds: timeToExpire), logout);
     // }
+  }
+
+  Future<void> googleSign() async {
+    try {
+      final googleSign = GoogleSignIn();
+      final googleAccount = await googleSign.signIn();
+
+      print(googleAccount.displayName);
+      if (googleAccount == null) {
+        throw HttpException("Cancelled by user");
+      }
+      final uri = Uri.parse("${Public.baseUrl}/users/Oauth/google");
+      final googleSignIn = await googleAccount.authentication;
+      await http.post(uri, body: {"access_token": googleSignIn.accessToken});
+    } catch (e) {
+      print("Error : ${e.toString()}");
+      throw HttpException("Error While Loggin in");
+    }
   }
 }
