@@ -6,13 +6,16 @@ import 'package:re7al/Models/Places.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:re7al/data_models/place.dart';
 import 'package:re7al/providers/places_provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:re7al/Widgets/Map.dart';
 import 'package:re7al/Widgets/BookingDialogue.dart';
 
 class Place extends StatefulWidget {
-  static const routeName = '/place';
+  PlaceModel place;
+  Place(this.place);
+  static const routeName = 'Place';
 
   @override
   _PlaceState createState() => _PlaceState();
@@ -29,15 +32,12 @@ class _PlaceState extends State<Place> {
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final place =
-        Provider.of<PlacesProvider>(context, listen: false).selectedPlace;
-
-    print("place $place");
+    bool isFav =
+        Provider.of<PlacesProvider>(context).savedPlaces.contains(widget.place);
     return DefaultTabController(
       length: 2,
       child: SafeArea(
@@ -57,7 +57,9 @@ class _PlaceState extends State<Place> {
                         bottomLeft: Radius.circular(80.0),
                       ),
                       image: DecorationImage(
-                        image: NetworkImage(place.image),
+                        image: widget.place.image == null
+                            ? AssetImage("images/bestPlaces.png")
+                            : NetworkImage(widget.place.image),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -120,14 +122,12 @@ class _PlaceState extends State<Place> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: place.name,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 50,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                  FittedBox(
+                                    child: Text(widget.place.name,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.bold)),
                                   ),
                                   CircleAvatar(
                                     radius: 22,
@@ -136,15 +136,16 @@ class _PlaceState extends State<Place> {
                                       child: IconButton(
                                         iconSize: 30,
                                         icon: Icon(
-                                          place.isFav
+                                          isFav
                                               ? Icons.favorite
                                               : Icons.favorite_outline_outlined,
                                           color: Colors.red,
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            place.isFav = !place.isFav;
-                                          });
+                                        onPressed: () async {
+                                          await Provider.of<PlacesProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .favourite(widget.place);
                                         },
                                       ),
                                     ),
@@ -158,7 +159,9 @@ class _PlaceState extends State<Place> {
                                 RatingBar.builder(
                                   allowHalfRating: true,
                                   itemSize: 25,
-                                  initialRating: place.rating.toDouble(),
+                                  initialRating: widget.place.rating == null
+                                      ? 0.0
+                                      : widget.place.rating,
                                   minRating: 1,
                                   direction: Axis.horizontal,
                                   itemCount: 5,
@@ -179,7 +182,9 @@ class _PlaceState extends State<Place> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(2),
                                     child: Text(
-                                      '${place.rating} Stars',
+                                      widget.place.rating == null
+                                          ? "rating: N/F"
+                                          : '${widget.place.rating} Stars',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
@@ -193,7 +198,9 @@ class _PlaceState extends State<Place> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '${place.reviews} Reviews ',
+                                    widget.place.reviews == null
+                                        ? 'reviews: N/F'
+                                        : ' ${widget.place.reviews} Reviews ',
                                     style: TextStyle(color: font_color),
                                   ),
                                 ],
@@ -212,7 +219,9 @@ class _PlaceState extends State<Place> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: ReadMoreText(
-                                    'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
+                                    widget.place.description != null
+                                        ? widget.place.description
+                                        : 'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
                                     style: TextStyle(color: font_color),
                                     trimLines: 2,
                                     colorClickableText: Colors.red,
@@ -326,10 +335,16 @@ class _PlaceState extends State<Place> {
                             ),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: Row(
-                                  children: place.media
-                                      .map((e) => Story(e))
-                                      .toList()),
+                              child: widget.place.media.isEmpty
+                                  ? Row(
+                                      children: [null, null, null]
+                                          .map((e) => Story(e))
+                                          .toList(),
+                                    )
+                                  : Row(
+                                      children: widget.place.media
+                                          .map((e) => Story(e))
+                                          .toList()),
                             ),
                             // Padding(
                             //   padding: const EdgeInsets.only(
@@ -448,8 +463,8 @@ class _PlaceState extends State<Place> {
                     ),
                     Container(
                       child: Map(
-                        lat: place.coordinates[1],
-                        long: place.coordinates[0],
+                        lat: widget.place.coordinates[1],
+                        long: widget.place.coordinates[0],
                       ),
                     ),
                     // SingleChildScrollView(

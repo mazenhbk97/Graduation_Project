@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
             'Settings': (context) => Settings(),
             'BDContent': (context) => BDContent(),
             'ModalBottomSheet': (context) => BottomSheetModal(),
-            Place.routeName: (context) => Place(),
+            // Place.routeName: (context) => Place(),
             'ContactUs': (context) => ContactUs(),
             'FAQ': (context) => FAQ(),
             'AppNotf': (context) => AppNotf(),

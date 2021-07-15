@@ -78,36 +78,7 @@ class _FavoritesState extends State<Favorites> {
                   child: TabBarView(
                     children: [
                       SavedPlaces('Overall'),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                              Favorite_Card(
-                                CardName: 'pyramids',
-                                CardRating: 4.9,
-                                CardReviews: 19,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      SavedPlaces("rate"),
                       SavedPlaces('new'),
                     ],
                   ),
@@ -121,9 +92,30 @@ class _FavoritesState extends State<Favorites> {
   }
 }
 
-class SavedPlaces extends StatelessWidget {
+class SavedPlaces extends StatefulWidget {
   String urlSeg;
   SavedPlaces(this.urlSeg);
+
+  @override
+  _SavedPlacesState createState() => _SavedPlacesState();
+}
+
+class _SavedPlacesState extends State<SavedPlaces> {
+  var isLoading = false;
+  initState() {
+    super.initState();
+    Future.delayed(Duration.zero).then((_) async {
+      setState(() {
+        isLoading = true;
+      });
+      await Provider.of<PlacesProvider>(context, listen: false)
+          .getSavedPlaces(widget.urlSeg);
+
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,24 +123,23 @@ class SavedPlaces extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: FutureBuilder<List<PlaceModel>>(
-            future: Provider.of<PlacesProvider>(context, listen: false)
-                .getSavedPlaces(urlSeg),
-            builder: (ctx, snapshot) =>
-                snapshot.connectionState == ConnectionState.waiting
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Column(
-                        children: snapshot.data
-                            .map((e) => Favorite_Card(
-                                  CardName: e.name,
-                                  CardRating: double.parse(e.rating.toString()),
-                                  CardReviews: e.rating,
-                                  id: e.id,
-                                ))
-                            .toList()),
-          ),
+          child: isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Selector<PlacesProvider, List<PlaceModel>>(
+                  selector: (context, placesPrv) => placesPrv.savedPlaces,
+                  builder: (context, savedPlaces, _) =>
+                      savedPlaces.isEmpty || savedPlaces == null
+                          ? Center(
+                              child: Text("Go add some places !"),
+                            )
+                          : Column(
+                              children: savedPlaces
+                                  .map((e) => Favorite_Card(
+                                        place: e,
+                                      ))
+                                  .toList())),
         ));
   }
 }

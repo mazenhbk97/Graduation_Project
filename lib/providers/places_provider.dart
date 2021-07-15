@@ -14,7 +14,15 @@ class PlacesProvider with ChangeNotifier {
 
   void selectPlace(String id) {
     _selectedPlace = _savedPlaces.firstWhere((element) => element.id == id);
-    _selectedPlace.isFav = true;
+    if (_selectedPlace != null) {
+      _selectedPlace.isFav = true;
+    }
+    _selectedPlace = _cityPlaces.firstWhere((element) => element.id == id);
+    notifyListeners();
+  }
+
+  List<PlaceModel> get savedPlaces {
+    return [..._savedPlaces];
   }
 
   PlaceModel get selectedPlace {
@@ -23,8 +31,8 @@ class PlacesProvider with ChangeNotifier {
 
   Future<List<PlaceModel>> getSavedPlaces(String urlSeg) async {
     Uri uri = Uri.parse('${Public.baseUrl}/users/saved/$urlSeg');
-    String token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjI0LCJlbWFpbCI6Im90aG1hbmF0ZWY4OUBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjI0NDY2MjA3fQ.SXJ9GTde9p7JuSiaJm5o38ho8-eBk7KUpC_8OwLt-Q4";
+
+    String token = await _getToken();
 
     try {
       final response = await http.get(uri, headers: {'auth-token': token});
@@ -64,5 +72,24 @@ class PlacesProvider with ChangeNotifier {
       print("error: $e");
     }
     return [..._cityPlaces];
+  }
+
+  Future<void> favourite(PlaceModel place) async {
+    print("id ${place.id}");
+    try {
+      final url = Uri.parse("${Public.baseUrl}/users/savePlaces/${place.id}");
+      String token = await _getToken();
+
+      final response = await http.post(url, headers: {"auth-token": token});
+      print("${response.body.toString()}");
+      if (_savedPlaces.contains(place)) {
+        _savedPlaces.remove(place);
+      } else {
+        _savedPlaces.add(place);
+      }
+      notifyListeners();
+    } catch (e) {
+      print("error: $e");
+    }
   }
 }

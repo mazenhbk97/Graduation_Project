@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
+import 'package:re7al/data_models/place.dart';
 import 'package:re7al/providers/places_provider.dart';
 import 'package:re7al/screens/Place.dart';
 
 class Favorite_Card extends StatefulWidget {
-  Favorite_Card({
-    this.CardName,
-    this.CardRating,
-    this.id,
-    this.CardReviews,
-  });
-
-  String CardName;
-  String id;
-  num CardRating;
-  num CardReviews;
+  Favorite_Card({this.place, this.removePlace});
+  PlaceModel place;
+  final Function removePlace;
   @override
   _Favorite_CardState createState() => _Favorite_CardState();
 }
@@ -27,9 +20,8 @@ class _Favorite_CardState extends State<Favorite_Card> {
       padding: const EdgeInsets.only(bottom: 5),
       child: InkWell(
         onTap: () {
-          Provider.of<PlacesProvider>(context, listen: false)
-              .selectPlace(widget.id);
-          Navigator.of(context).pushNamed(Place.routeName);
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => Place(widget.place)));
         },
         child: Card(
           color: Colors.grey.shade400,
@@ -47,7 +39,7 @@ class _Favorite_CardState extends State<Favorite_Card> {
                     Column(
                       children: [
                         Text(
-                          widget.CardName,
+                          widget.place.name,
                           style: TextStyle(color: Colors.white, fontSize: 25),
                         ),
                       ],
@@ -75,14 +67,14 @@ class _Favorite_CardState extends State<Favorite_Card> {
                           width: 5,
                         ),
                         Text(
-                          "${widget.CardRating}",
+                          "${widget.place.rating}",
                           style: TextStyle(color: Colors.white),
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
-                          "${widget.CardReviews} reviews",
+                          "${widget.place.reviews} reviews",
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -91,7 +83,11 @@ class _Favorite_CardState extends State<Favorite_Card> {
                       children: [
                         IconButton(
                           icon: Icon(Icons.delete),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await Provider.of<PlacesProvider>(context,
+                                    listen: false)
+                                .favourite(widget.place);
+                          },
                         )
                       ],
                     ),

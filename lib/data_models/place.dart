@@ -5,6 +5,7 @@ class PlaceModel {
   String name;
   String address;
   String image;
+  String description;
   bool isFav;
   num rating;
   num reviews;
@@ -21,6 +22,7 @@ class PlaceModel {
       @required this.address,
       @required this.media,
       this.isFav = false,
+      this.description,
       @required this.rating});
 
   PlaceModel.fromJson(Map<String, dynamic> placeMap) {
@@ -35,5 +37,7 @@ class PlaceModel {
     this.coordinates = (placeMap['location']['coordinates'] as List<dynamic>)
         .map((e) => double.parse(e.toString()))
         .toList();
+    this.isFav = false;
+    this.description = placeMap["description"];
   }
 }

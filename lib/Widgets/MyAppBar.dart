@@ -52,9 +52,11 @@ class _MyAppBarState extends State<MyAppBar> {
             child: Selector<AuthProvider, User>(
                 selector: (ctx, authProv) => authProv.user,
                 builder: (ctx, user, _) => CircleAvatar(
-                      foregroundImage: NetworkImage(
-                        user == null ? "" : user.imgUrl,
-                      ),
+                      foregroundImage: user == null
+                          ? AssetImage("images/bestPlaces.png")
+                          : NetworkImage(
+                              user.imgUrl,
+                            ),
                       maxRadius: 35,
                     )),
           )
