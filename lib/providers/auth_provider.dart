@@ -126,7 +126,6 @@ class AuthProvider with ChangeNotifier {
         data: formData,
       );
       final responseData = response.data as Map<String, dynamic>;
-      print("responseData: ${response.data.runtimeType}");
       _user = User.fromMap(responseData);
       print("use:: ${_user.name}");
       notifyListeners();

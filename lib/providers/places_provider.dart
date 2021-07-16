@@ -22,7 +22,8 @@ class PlacesProvider with ChangeNotifier {
   }
 
   List<PlaceModel> get savedPlaces {
-    return [..._savedPlaces];
+    print(" helloo ${_savedPlaces.toString()}");
+    return _savedPlaces;
   }
 
   PlaceModel get selectedPlace {
@@ -38,7 +39,6 @@ class PlacesProvider with ChangeNotifier {
       final response = await http.get(uri, headers: {'auth-token': token});
 
       final responseData = jsonDecode(response.body) as List<dynamic>;
-      print("data: ${responseData.runtimeType}");
 
       _savedPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
       notifyListeners();
@@ -57,16 +57,12 @@ class PlacesProvider with ChangeNotifier {
 
   Future<List<PlaceModel>> getCityPlaces(String cityId) async {
     Uri uri = Uri.parse('${Public.baseUrl}/places/cities/$cityId');
-    print("cityId: $cityId");
 
     try {
       final response = await http.get(uri);
-      print("response ${response.body}");
       final responseData = jsonDecode(response.body) as List<dynamic>;
-      print("data: ${responseData.runtimeType}");
 
       _cityPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
-      print(_cityPlaces.toString());
       notifyListeners();
     } catch (e) {
       print("error: $e");
@@ -75,18 +71,16 @@ class PlacesProvider with ChangeNotifier {
   }
 
   Future<void> favourite(PlaceModel place) async {
-    print("id ${place.id}");
     try {
       final url = Uri.parse("${Public.baseUrl}/users/savePlaces/${place.id}");
       String token = await _getToken();
 
-      final response = await http.post(url, headers: {"auth-token": token});
-      print("${response.body.toString()}");
       if (_savedPlaces.contains(place)) {
         _savedPlaces.remove(place);
       } else {
         _savedPlaces.add(place);
       }
+      final response = await http.post(url, headers: {"auth-token": token});
       notifyListeners();
     } catch (e) {
       print("error: $e");

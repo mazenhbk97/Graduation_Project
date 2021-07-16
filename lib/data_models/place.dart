@@ -39,5 +39,6 @@ class PlaceModel {
         .toList();
     this.isFav = false;
     this.description = placeMap["description"];
+    this.serviceId = placeMap["service"];
   }
 }

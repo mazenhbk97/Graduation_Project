@@ -38,6 +38,12 @@ dependencies:
   http_parser: ^4.0.0
   image_picker: ^0.7.4
   modal_bottom_sheet: ^2.0.0
+  downloads_path_provider: ^0.1.0
+  permission_handler: ^8.1.2
+  qr_flutter: ^4.0.0
+  screenshot: ^1.2.1
+  pdf: ^3.4.2
+
   provider: ^5.0.0
   readmore: ^2.0.0
   shared_preferences: ^2.0.6

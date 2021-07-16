@@ -3,6 +3,7 @@ import 'package:re7al/Widgets/BDContent.dart';
 import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:re7al/providers/auth_provider.dart';
+import 'package:re7al/providers/booking_provider.dart';
 import 'package:re7al/providers/city_provider.dart';
 import 'package:re7al/providers/places_provider.dart';
 import 'package:re7al/screens/AppNotf.dart';
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider.value(value: AuthProvider()),
           ChangeNotifierProvider.value(value: PlacesProvider()),
-          ChangeNotifierProvider.value(value: CityProvider())
+          ChangeNotifierProvider.value(value: CityProvider()),
+          ChangeNotifierProvider.value(value: BookingProvider())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -7,6 +7,7 @@ import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:re7al/data_models/place.dart';
+import 'package:re7al/helpers/servicesData.dart';
 import 'package:re7al/providers/places_provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:re7al/Widgets/Map.dart';
@@ -262,7 +263,7 @@ class _PlaceState extends State<Place> {
                                     ),
                                   ),
                                   Text(
-                                    'Place Type: $typeOfPlace',
+                                    'Place Type: ${services[widget.place.serviceId]}',
                                     style: TextStyle(
                                         color: font_color,
                                         fontWeight: FontWeight.bold),
@@ -309,7 +310,8 @@ class _PlaceState extends State<Place> {
                                           showDialog(
                                               context: context,
                                               builder: (context) =>
-                                                  BookingDialogue());
+                                                  BookingDialogue(
+                                                      widget.place));
                                         });
                                       },
                                     ),

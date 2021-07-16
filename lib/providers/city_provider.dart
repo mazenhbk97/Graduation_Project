@@ -20,7 +20,6 @@ class CityProvider with ChangeNotifier {
 
   void selectCity(String name) {
     _selectedCity = _cities.firstWhere((element) => element.name == name);
-    print("selectedCity :${_selectedCity.toString()}");
     notifyListeners();
   }
 
@@ -28,13 +27,10 @@ class CityProvider with ChangeNotifier {
     try {
       final url = Uri.parse("${Public.baseUrl}/cities");
       final response = await http.get(url);
-      print(" response type ${response.body.runtimeType}");
       final responseData = jsonDecode(response.body) as List<dynamic>;
-      print("${responseData}");
       _cities = responseData
           .map((e) => City.fromMap(e as Map<String, dynamic>))
           .toList();
-      print('name :${_cities[0].name}');
       notifyListeners();
     } catch (e) {
       print("error $e");

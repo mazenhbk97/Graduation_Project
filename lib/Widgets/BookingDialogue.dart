@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
+import 'package:re7al/data_models/place.dart';
+import 'package:re7al/providers/booking_provider.dart';
+import 'package:re7al/screens/qrcode_screen.dart';
 
 enum Gender { VisaCard, MasterCard, Fawry, Cash }
 
@@ -9,6 +13,8 @@ class BookingDialogue extends StatefulWidget {
   var EgyptianTicketPrice;
   var ForeignerTicketPrice;
   var ArabTicketPrice;
+  final PlaceModel place;
+  BookingDialogue(this.place);
 
   @override
   _BookingDialogueState createState() => _BookingDialogueState();
@@ -46,6 +52,7 @@ class _BookingDialogueState extends State<BookingDialogue> {
   }
 
   Gender _genderValue = Gender.VisaCard;
+  var nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +98,7 @@ class _BookingDialogueState extends State<BookingDialogue> {
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: Container(
                 child: TextField(
+                  controller: nameController,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     hintText: 'Full name ',
@@ -327,6 +335,26 @@ class _BookingDialogueState extends State<BookingDialogue> {
               color: user_auth,
             ),
             child: FlatButton(
+              onPressed: () async {
+                try {
+                  await Provider.of<BookingProvider>(context, listen: false)
+                      .newBooking(widget.place.id, _n);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => QrCode(widget.place.name)));
+                } catch (e) {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                            title: Text("Operation failed"),
+                            content: Text("You already booked this place"),
+                            actions: [
+                              FlatButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("Ok"))
+                            ],
+                          ));
+                }
+              },
               child: Text(
                 'Book Now',
                 style: TextStyle(color: Colors.white, fontSize: 20),
