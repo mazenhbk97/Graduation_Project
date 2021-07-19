@@ -37,8 +37,8 @@ class _PlaceState extends State<Place> {
 
   @override
   Widget build(BuildContext context) {
-    bool isFav =
-        Provider.of<PlacesProvider>(context).savedPlaces.contains(widget.place);
+    bool isFav = Provider.of<PlacesProvider>(context).isFav(widget.place.id);
+    print("isFav :$isFav");
     return DefaultTabController(
       length: 2,
       child: SafeArea(
@@ -147,6 +147,9 @@ class _PlaceState extends State<Place> {
                                                   context,
                                                   listen: false)
                                               .favourite(widget.place);
+                                          setState(() {
+                                            isFav = false;
+                                          });
                                         },
                                       ),
                                     ),
@@ -458,7 +461,7 @@ class _PlaceState extends State<Place> {
                             //     ),
                             //   ),
                             // ),
-                            BottomSheetModal(),
+                            BottomSheetModal(widget.place.id),
                           ],
                         ),
                       ),

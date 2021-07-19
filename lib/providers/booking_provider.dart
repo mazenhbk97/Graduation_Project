@@ -16,7 +16,6 @@ class BookingProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     try {
       final token = prefs.getString("token");
-      print(token);
       final url = Uri.parse('${Public.baseUrl}/bookings/newBooking/$placeId');
       final response = await http.post(url,
           body: jsonEncode({"ticketsNo": quantity.toString()}),
@@ -25,7 +24,6 @@ class BookingProvider with ChangeNotifier {
       _bookingId = data["id"];
       notifyListeners();
     } catch (e) {
-      print("bookingError $e");
       throw e;
     }
   }

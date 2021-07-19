@@ -33,7 +33,7 @@ class CityProvider with ChangeNotifier {
           .toList();
       notifyListeners();
     } catch (e) {
-      print("error $e");
+      throw e;
     }
   }
 }

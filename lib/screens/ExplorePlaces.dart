@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Models/Places.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:re7al/Models/city.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/MyAppBar.dart';
 import 'package:re7al/Widgets/Place_Card.dart';
 import 'package:re7al/Widgets/Place_StoryCard.dart';
+import 'package:re7al/providers/city_provider.dart';
 import 'package:re7al/screens/SideMenu.dart';
 import 'package:re7al/screens/ExploreAlert.dart';
 
@@ -21,6 +24,7 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
 
   @override
   Widget build(BuildContext context) {
+    City city = Provider.of<CityProvider>(context).selectedCity;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70),
@@ -36,25 +40,33 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 20, left: 15),
-                  child: Text(
-                    'Welcome in ',
-                    style: TextStyle(fontSize: 20),
+            GestureDetector(
+              onTap: () => () {
+                showDialog(context: context, builder: (ctx) => ExploreAlert());
+              },
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 20, left: 15),
+                    child: Text(
+                      'Welcome in ',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-                Container(
-                    margin: EdgeInsets.only(top: 20, right: 15, left: 15),
-                    child: GestureDetector(
-                      // onTap: dialogalert,
-                      child: Text(
-                        '$CityName',
-                        style: TextStyle(fontSize: 20, color: font_color),
-                      ),
-                    )),
-              ],
+                  Visibility(
+                    visible: city == null ? false : true,
+                    child: Container(
+                        margin: EdgeInsets.only(top: 20, right: 15, left: 15),
+                        child: GestureDetector(
+                          // onTap: dialogalert,
+                          child: Text(
+                            '${city.name}',
+                            style: TextStyle(fontSize: 20, color: font_color),
+                          ),
+                        )),
+                  ),
+                ],
+              ),
             ),
             Row(
               children: [
@@ -78,10 +90,10 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 viewportFraction: 0.66,
               ),
               items: [
-                Story(''),
-                Story(''),
-                Story(''),
-                Story(''),
+                Story(null),
+                Story(null),
+                Story(null),
+                Story(null),
               ],
             ),
             Row(

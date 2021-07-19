@@ -21,9 +21,17 @@ class PlacesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isFav(String placeId) {
+    if (_savedPlaces.isEmpty) {
+      return false;
+    }
+    PlaceModel place =
+        _savedPlaces.firstWhere((element) => element.id == placeId);
+    return place == null ? false : true;
+  }
+
   List<PlaceModel> get savedPlaces {
-    print(" helloo ${_savedPlaces.toString()}");
-    return _savedPlaces;
+    return [..._savedPlaces];
   }
 
   PlaceModel get selectedPlace {
@@ -33,7 +41,7 @@ class PlacesProvider with ChangeNotifier {
   Future<List<PlaceModel>> getSavedPlaces(String urlSeg) async {
     Uri uri = Uri.parse('${Public.baseUrl}/users/saved/$urlSeg');
 
-    String token = await _getToken();
+    String token = await Public.getToken();
 
     try {
       final response = await http.get(uri, headers: {'auth-token': token});
@@ -41,18 +49,10 @@ class PlacesProvider with ChangeNotifier {
       final responseData = jsonDecode(response.body) as List<dynamic>;
 
       _savedPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
-      notifyListeners();
     } catch (e) {
-      print("error: $e");
+      throw e;
     }
     return [..._savedPlaces];
-  }
-
-  Future<String> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    String token = prefs.getString('token');
-    return token;
   }
 
   Future<List<PlaceModel>> getCityPlaces(String cityId) async {
@@ -65,7 +65,7 @@ class PlacesProvider with ChangeNotifier {
       _cityPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
       notifyListeners();
     } catch (e) {
-      print("error: $e");
+      throw e;
     }
     return [..._cityPlaces];
   }
@@ -73,17 +73,19 @@ class PlacesProvider with ChangeNotifier {
   Future<void> favourite(PlaceModel place) async {
     try {
       final url = Uri.parse("${Public.baseUrl}/users/savePlaces/${place.id}");
-      String token = await _getToken();
+      String token = await Public.getToken();
+      print(token);
 
       if (_savedPlaces.contains(place)) {
         _savedPlaces.remove(place);
       } else {
         _savedPlaces.add(place);
       }
-      final response = await http.post(url, headers: {"auth-token": token});
       notifyListeners();
+
+      await http.post(url, headers: {"auth-token": token});
     } catch (e) {
-      print("error: $e");
+      throw e;
     }
   }
 }

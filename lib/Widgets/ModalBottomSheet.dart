@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
+import 'package:re7al/data_models/comment.dart';
+import 'package:re7al/data_models/user.dart';
+import 'package:re7al/providers/auth_provider.dart';
+import 'package:re7al/providers/commets_provider.dart';
 
 class BottomSheetModal extends StatefulWidget {
-  const BottomSheetModal({Key key}) : super(key: key);
+  String placeId;
+  BottomSheetModal(this.placeId);
 
   @override
   _BottomSheetModalState createState() => _BottomSheetModalState();
 }
 
 class _BottomSheetModalState extends State<BottomSheetModal> {
+  @override
+  initState() {
+    Future.delayed(Duration.zero).then((_) async {
+      await Provider.of<CommentsProvider>(context, listen: false)
+          .fetchComments(widget.placeId);
+    });
+    super.initState();
+  }
+
+  final commentController = TextEditingController();
+  bool isValid = true;
   bool fav = true;
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<AuthProvider>(context, listen: false).user;
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 10, right: 15, left: 15),
       child: Container(
@@ -23,12 +41,13 @@ class _BottomSheetModalState extends State<BottomSheetModal> {
           leading: CircleAvatar(
             backgroundColor: font_color,
             child: CircleAvatar(
+              backgroundImage: NetworkImage(user.imgUrl),
               backgroundColor: Colors.white,
               child: Icon(Icons.person_outline_rounded),
               foregroundColor: font_color,
             ),
           ),
-          title: Text('UserName'),
+          title: Text(user == null ? "User name" : user.name),
           subtitle: Text('this is my comment'),
           trailing: Icon(
             Icons.arrow_drop_up_sharp,
@@ -61,13 +80,36 @@ class _BottomSheetModalState extends State<BottomSheetModal> {
                               padding:
                                   const EdgeInsets.only(top: 20, bottom: 20),
                               child: TextFormField(
+                                controller: commentController,
+                                onFieldSubmitted: (v) async {
+                                  if (v.trim().length == 0 || v.length < 5) {
+                                    setState(() {
+                                      isValid = false;
+                                    });
+                                  } else {
+                                    Comment comment = Comment(
+                                        content: v,
+                                        id: DateTime.now().toString(),
+                                        userId: user.id,
+                                        placeId: int.parse(widget.placeId),
+                                        userImage: user.imgUrl,
+                                        userName: user.name);
+                                    await Provider.of<CommentsProvider>(context,
+                                            listen: false)
+                                        .addComment(widget.placeId, comment);
+                                    commentController.clear();
+                                  }
+                                },
                                 decoration: InputDecoration(
+                                  errorText: isValid ? null : "Short Comment",
                                   prefixIcon: Container(
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(80),
                                         color: Colors.white),
                                     child: CircleAvatar(
                                       backgroundColor: font_color,
+                                      backgroundImage:
+                                          NetworkImage(user.imgUrl),
                                       radius: 10,
                                       child: Icon(
                                         Icons.person,
@@ -79,12 +121,49 @@ class _BottomSheetModalState extends State<BottomSheetModal> {
                                   hintText: '   Add a public comment',
                                   suffixIcon: IconButton(
                                     icon: Icon(Icons.arrow_forward),
+                                    onPressed: () async {
+                                      if (commentController.text
+                                                  .trim()
+                                                  .length ==
+                                              0 ||
+                                          commentController.text.length < 5) {
+                                        setState(() {
+                                          isValid = false;
+                                        });
+                                      } else {
+                                        Comment comment = Comment(
+                                            content: commentController.text,
+                                            id: DateTime.now().toString(),
+                                            userId: user.id,
+                                            placeId: int.parse(widget.placeId),
+                                            userImage: user.imgUrl,
+                                            userName: user.name);
+                                        await Provider.of<CommentsProvider>(
+                                                context,
+                                                listen: false)
+                                            .addComment(
+                                                widget.placeId, comment);
+                                        commentController.clear();
+                                      }
+                                    },
                                   ),
                                 ),
                               ),
                             ),
-                            MBS_comment(),
-                            MBS_comment(),
+                            Consumer<CommentsProvider>(
+                                builder: (ctx, commentsProv, _) => commentsProv
+                                            .comment.isEmpty ||
+                                        commentsProv.comment == null
+                                    ? Center(
+                                        child:
+                                            Text("No comments for this place"),
+                                      )
+                                    : Column(
+                                        children: commentsProv.comment
+                                            .map((comment) =>
+                                                MBS_comment(comment))
+                                            .toList(),
+                                      ))
                           ],
                         ),
                       ),
@@ -101,7 +180,9 @@ class _BottomSheetModalState extends State<BottomSheetModal> {
 }
 
 class MBS_comment extends StatefulWidget {
-  const MBS_comment({Key key}) : super(key: key);
+  final Comment comment;
+
+  MBS_comment(this.comment);
 
   @override
   _MBS_commentState createState() => _MBS_commentState();
@@ -121,13 +202,16 @@ class _MBS_commentState extends State<MBS_comment> {
               radius: 20,
               backgroundColor: Colors.white,
               child: CircleAvatar(
+                backgroundImage: NetworkImage(widget.comment.userImage),
                 backgroundColor: font_color,
                 radius: 19,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 30,
-                ),
+                child: widget.comment == null
+                    ? Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 30,
+                      )
+                    : null,
               ),
             ),
             Container(
@@ -148,9 +232,9 @@ class _MBS_commentState extends State<MBS_comment> {
                   },
                 ),
                 title: Text(
-                  'UserName',
+                  widget.comment.userName,
                 ),
-                subtitle: Text('This is a comment'),
+                subtitle: Text(widget.comment.content),
               ),
             ),
           ],

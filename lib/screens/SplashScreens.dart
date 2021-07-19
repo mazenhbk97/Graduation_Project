@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:provider/provider.dart';
+import 'package:re7al/providers/places_provider.dart';
 
 class SplashScreens extends StatefulWidget {
   _SplashScreensState createState() => new _SplashScreensState();
 }
 
 class _SplashScreensState extends State<SplashScreens> {
+  @override
+  initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget carousel = new Carousel(

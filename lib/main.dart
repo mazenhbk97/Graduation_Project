@@ -5,6 +5,7 @@ import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:re7al/providers/auth_provider.dart';
 import 'package:re7al/providers/booking_provider.dart';
 import 'package:re7al/providers/city_provider.dart';
+import 'package:re7al/providers/commets_provider.dart';
 import 'package:re7al/providers/places_provider.dart';
 import 'package:re7al/screens/AppNotf.dart';
 import 'package:re7al/screens/Clubs.dart';
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: AuthProvider()),
           ChangeNotifierProvider.value(value: PlacesProvider()),
           ChangeNotifierProvider.value(value: CityProvider()),
-          ChangeNotifierProvider.value(value: BookingProvider())
+          ChangeNotifierProvider.value(value: BookingProvider()),
+          ChangeNotifierProvider.value(value: CommentsProvider())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -62,7 +64,6 @@ class MyApp extends StatelessWidget {
             'SideMenu': (context) => SideMenu(),
             'Settings': (context) => Settings(),
             'BDContent': (context) => BDContent(),
-            'ModalBottomSheet': (context) => BottomSheetModal(),
             // Place.routeName: (context) => Place(),
             'ContactUs': (context) => ContactUs(),
             'FAQ': (context) => FAQ(),

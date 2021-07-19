@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/Home_Contents.dart';
 import 'package:re7al/providers/auth_provider.dart';
+import 'package:re7al/providers/places_provider.dart';
 import 'package:re7al/screens/Favorites.dart';
 import 'package:re7al/screens/Login.dart';
 import 'package:re7al/screens/UserProfile.dart';
@@ -21,6 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(Duration.zero).then((_) async {
       Provider.of<AuthProvider>(context, listen: false).tryAutoLogIn();
       Provider.of<AuthProvider>(context, listen: false).getProfile();
+      Provider.of<PlacesProvider>(context, listen: false)
+          .getSavedPlaces("Overall");
     });
     super.initState();
   }

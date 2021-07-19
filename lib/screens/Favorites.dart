@@ -127,15 +127,15 @@ class _SavedPlacesState extends State<SavedPlaces> {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : Selector<PlacesProvider, List<PlaceModel>>(
-                  selector: (context, placesPrv) => placesPrv.savedPlaces,
-                  builder: (context, savedPlaces, _) =>
-                      savedPlaces.isEmpty || savedPlaces == null
+              : Consumer<PlacesProvider>(
+                  builder: (context, placesProv, _) =>
+                      placesProv.savedPlaces.isEmpty ||
+                              placesProv.savedPlaces == null
                           ? Center(
                               child: Text("Go add some places !"),
                             )
                           : Column(
-                              children: savedPlaces
+                              children: placesProv.savedPlaces
                                   .map((e) => Favorite_Card(
                                         place: e,
                                       ))

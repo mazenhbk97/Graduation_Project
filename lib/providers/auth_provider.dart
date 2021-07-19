@@ -43,7 +43,6 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> signIn(String email, String password) async {
-    print("mail: $email, pass: $password");
     return _authenticate(email, password, 'login');
   }
 
@@ -127,10 +126,10 @@ class AuthProvider with ChangeNotifier {
       );
       final responseData = response.data as Map<String, dynamic>;
       _user = User.fromMap(responseData);
-      print("use:: ${_user.name}");
       notifyListeners();
     } catch (e) {
       print("error $e");
+      throw e;
     }
   }
 
@@ -149,6 +148,7 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print(e);
+      throw e;
     }
     return _user;
 
@@ -166,7 +166,6 @@ class AuthProvider with ChangeNotifier {
       final googleSign = GoogleSignIn();
       final googleAccount = await googleSign.signIn();
 
-      print(googleAccount.displayName);
       if (googleAccount == null) {
         throw HttpException("Cancelled by user");
       }
@@ -174,7 +173,6 @@ class AuthProvider with ChangeNotifier {
       final googleSignIn = await googleAccount.authentication;
       await http.post(uri, body: {"access_token": googleSignIn.accessToken});
     } catch (e) {
-      print("Error : ${e.toString()}");
       throw HttpException("Error While Loggin in");
     }
   }
