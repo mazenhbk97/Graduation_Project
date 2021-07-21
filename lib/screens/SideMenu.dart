@@ -1,6 +1,10 @@
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/MyAppBar.dart';
+import 'package:re7al/data_models/user.dart';
+import 'package:re7al/providers/auth_provider.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({Key key}) : super(key: key);
@@ -18,6 +22,7 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<AuthProvider>(context, listen: false).user;
     return Drawer(
       // column holds all the widgets in the drawer
       child: Column(
@@ -29,14 +34,17 @@ class _SideMenuState extends State<SideMenu> {
                 UserAccountsDrawerHeader(
                   currentAccountPicture: GestureDetector(
                     onTap: iconTap,
-                    child: CircleAvatar(foregroundImage: PpImg, maxRadius: 50),
+                    child: CircleAvatar(
+                        foregroundImage: user == null ? PpImg : user.imgUrl,
+                        maxRadius: 50),
                   ),
                   accountName: GestureDetector(
-                    child: Text('Account Name'),
+                    child: Text(user == null ? 'Account Name' : user.name),
                     onTap: iconTap,
                   ),
                   accountEmail: GestureDetector(
-                    child: Text('Account_Email@gmail.com'),
+                    child: Text(
+                        user == null ? 'Account_Email@gmail.com' : user.email),
                     onTap: iconTap,
                   ),
                 ),
@@ -108,10 +116,12 @@ class _SideMenuState extends State<SideMenu> {
                       ListTile(
                         leading: Icon(Icons.logout),
                         title: Text('LogOut'),
-                        onTap: () {
+                        onTap: () async {
                           // Update the state of the app
                           // ...
                           // Then close the drawer
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .logout();
                           Navigator.pushNamed(context, 'Login');
                         },
                       ),

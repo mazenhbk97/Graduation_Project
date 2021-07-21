@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 
 import 'package:re7al/data_models/place.dart';
 import 'package:re7al/helpers/public.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PlacesProvider with ChangeNotifier {
   List<PlaceModel> _savedPlaces = [];
   List<PlaceModel> _cityPlaces = [];
+  List<PlaceModel> _filteredPlaces = [];
   PlaceModel _selectedPlace;
 
   void selectPlace(String id) {
@@ -21,6 +21,22 @@ class PlacesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<PlaceModel> get filteredPlaces {
+    if (_filteredPlaces.isEmpty) {
+      return [..._cityPlaces];
+    } else {
+      return [..._filteredPlaces];
+    }
+  }
+
+  List<PlaceModel> get savedPlaces {
+    return [..._savedPlaces];
+  }
+
+  PlaceModel get selectedPlace {
+    return _selectedPlace;
+  }
+
   bool isFav(String placeId) {
     if (_savedPlaces.isEmpty) {
       return false;
@@ -30,12 +46,10 @@ class PlacesProvider with ChangeNotifier {
     return place == null ? false : true;
   }
 
-  List<PlaceModel> get savedPlaces {
-    return [..._savedPlaces];
-  }
-
-  PlaceModel get selectedPlace {
-    return _selectedPlace;
+  void filterPlaces(int serviceId) {
+    _filteredPlaces =
+        _cityPlaces.where((element) => element.serviceId == serviceId).toList();
+    notifyListeners();
   }
 
   Future<List<PlaceModel>> getSavedPlaces(String urlSeg) async {
@@ -87,5 +101,25 @@ class PlacesProvider with ChangeNotifier {
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<List<PlaceModel>> fetchNearest(String cityId, String serviceId) async {
+    Uri uri = Uri.parse(
+        "${Public.baseUrl}/places/cities/$cityId/services/$serviceId");
+
+    String token = await Public.getToken();
+    print(
+      "cityId :$cityId    serviceId: $serviceId",
+    );
+    List<PlaceModel> nearest = [];
+    try {
+      final response = await http.get(uri, headers: {'auth-token': token});
+      print("response :${response.body}");
+      final responseData = jsonDecode(response.body) as List<dynamic>;
+      nearest = responseData.map((e) => PlaceModel.fromJson(e)).toList();
+    } catch (e) {
+      throw e;
+    }
+    return nearest;
   }
 }

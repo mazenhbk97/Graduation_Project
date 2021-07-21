@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:re7al/Models/city.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/data_models/place.dart';
+import 'package:re7al/helpers/servicesData.dart';
 import 'package:re7al/providers/city_provider.dart';
 import 'package:re7al/screens/ChooseCity.dart';
 import 'package:re7al/screens/ExploreAlert.dart';
+import 'package:re7al/screens/ExplorePlaces.dart';
 import 'package:re7al/screens/SideMenu.dart';
 import 'package:re7al/providers/places_provider.dart';
 
@@ -127,19 +129,19 @@ class _Home_ContentsState extends State<Home_Contents> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       HS_Icons(
-                                        HSicon: Icon(Icons.museum_outlined),
-                                        HScolor: Colors.blue,
-                                        HSnavigator: 'BDContent',
-                                        HSname: 'Tourism',
-                                      ),
+                                          HSicon: Icon(Icons.museum_outlined),
+                                          HScolor: Colors.blue,
+                                          HSname: 'Tourism',
+                                          HSnavigator: () =>
+                                              goToExplore("Tourism")),
                                       SizedBox(
                                         width: 30,
                                       ),
                                       HS_Icons(
                                         HSicon: Icon(Icons.restaurant_outlined),
                                         HScolor: Colors.purple,
-                                        HSnavigator: 'test',
                                         HSname: 'Food',
+                                        HSnavigator: () => goToExplore("Food"),
                                       ),
                                       SizedBox(
                                         width: 30,
@@ -147,8 +149,9 @@ class _Home_ContentsState extends State<Home_Contents> {
                                       HS_Icons(
                                         HSicon: Icon(Icons.local_hospital),
                                         HScolor: Colors.deepOrangeAccent,
-                                        HSnavigator: 'Hospital',
                                         HSname: 'Hospital',
+                                        HSnavigator: () =>
+                                            goToExplore("Hospital"),
                                       ),
                                       SizedBox(
                                         width: 30,
@@ -156,8 +159,8 @@ class _Home_ContentsState extends State<Home_Contents> {
                                       HS_Icons(
                                         HSicon: Icon(Icons.grass_rounded),
                                         HScolor: Colors.green,
-                                        HSnavigator: 'ModalBottomSheet',
                                         HSname: 'Clubs',
+                                        HSnavigator: () => goToExplore("Club"),
                                       ),
                                     ],
                                   ),
@@ -190,5 +193,11 @@ class _Home_ContentsState extends State<Home_Contents> {
                         ),
                       ),
               ));
+  }
+
+  void goToExplore(String filter) {
+    Provider.of<PlacesProvider>(context, listen: false)
+        .filterPlaces(servicesFilter[filter]);
+    Navigator.of(context).pushNamed("ExplorePlaces");
   }
 }

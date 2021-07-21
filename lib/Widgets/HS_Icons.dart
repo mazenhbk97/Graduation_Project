@@ -14,7 +14,7 @@ class HS_Icons extends StatefulWidget {
   Icon HSicon;
   Color HScolor;
   String HSname;
-  String HSnavigator;
+  final Function HSnavigator;
   @override
   _HS_IconsState createState() => _HS_IconsState();
 }
@@ -36,7 +36,7 @@ class _HS_IconsState extends State<HS_Icons> {
               iconSize: 50,
               color: widget.HScolor,
               onPressed: () {
-                Navigator.pushNamed(context, widget.HSnavigator);
+                widget.HSnavigator();
               },
             ),
           ),

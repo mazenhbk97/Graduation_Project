@@ -234,11 +234,16 @@ class FormScreenState extends State<SignUp> {
                           return;
                         }
                         _formKey.currentState.save();
-                        await Provider.of<AuthProvider>(context, listen: false)
-                            .signUp(_email, _password, _firstname + _lastname,
-                                'Arish');
-                        Navigator.popUntil(
-                            context, ModalRoute.withName('HomeScreen'));
+                        try {
+                          await Provider.of<AuthProvider>(context,
+                                  listen: false)
+                              .signUp(_email, _password, _firstname + _lastname,
+                                  'Arish');
+                          Navigator.popUntil(
+                              context, ModalRoute.withName('HomeScreen'));
+                        } catch (e) {
+                          showErrorMessage(e);
+                        }
                       },
                     ),
                   ),
@@ -249,5 +254,11 @@ class FormScreenState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  void showErrorMessage(e) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(e.toString()),
+    ));
   }
 }

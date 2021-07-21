@@ -138,9 +138,13 @@ class _LoginState extends State<Login> {
                   ),
                   child: FlatButton(
                     onPressed: () async {
-                      await Provider.of<AuthProvider>(context, listen: false)
-                          .signIn(mail, password);
-                      Navigator.of(context).pop();
+                      try {
+                        await Provider.of<AuthProvider>(context, listen: false)
+                            .signIn(mail, password);
+                        Navigator.of(context).pop();
+                      } catch (e) {
+                        showErrorMessage(e);
+                      }
                     },
                     child: Text(
                       'Login',
@@ -164,9 +168,14 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
-                      onTap: () =>
+                      onTap: () {
+                        try {
                           Provider.of<AuthProvider>(context, listen: false)
-                              .googleSign(),
+                              .googleSign();
+                        } catch (e) {
+                          showErrorMessage(e);
+                        }
+                      },
                       child: CircleAvatar(
                         radius: 20,
                         backgroundColor: Colors.orangeAccent,
@@ -230,5 +239,11 @@ class _LoginState extends State<Login> {
         ],
       ),
     );
+  }
+
+  void showErrorMessage(e) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(e.toString()),
+    ));
   }
 }

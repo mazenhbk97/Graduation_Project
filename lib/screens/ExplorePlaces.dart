@@ -7,7 +7,9 @@ import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/MyAppBar.dart';
 import 'package:re7al/Widgets/Place_Card.dart';
 import 'package:re7al/Widgets/Place_StoryCard.dart';
+import 'package:re7al/data_models/place.dart';
 import 'package:re7al/providers/city_provider.dart';
+import 'package:re7al/providers/places_provider.dart';
 import 'package:re7al/screens/SideMenu.dart';
 import 'package:re7al/screens/ExploreAlert.dart';
 
@@ -25,6 +27,8 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
   @override
   Widget build(BuildContext context) {
     City city = Provider.of<CityProvider>(context).selectedCity;
+    final List<PlaceModel> places =
+        Provider.of<PlacesProvider>(context).filteredPlaces;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70),
@@ -83,19 +87,23 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 ),
               ],
             ),
-            CarouselSlider(
-              options: CarouselOptions(
-                initialPage: 4,
-                height: 160,
-                viewportFraction: 0.66,
-              ),
-              items: [
-                Story(null),
-                Story(null),
-                Story(null),
-                Story(null),
-              ],
-            ),
+            FutureBuilder<List<PlaceModel>>(
+                future: Provider.of<PlacesProvider>(context, listen: false)
+                    .fetchNearest(city.id, places.first.serviceId.toString()),
+                builder: (ctx, snapshot) => snapshot.connectionState ==
+                        ConnectionState.waiting
+                    ? LinearProgressIndicator()
+                    : snapshot.data == null || snapshot.data.isEmpty
+                        ? Text("There is no nearest places to your location")
+                        : CarouselSlider(
+                            options: CarouselOptions(
+                              initialPage: 4,
+                              height: 160,
+                              viewportFraction: 0.66,
+                            ),
+                            items: snapshot.data
+                                .map((place) => Story(place.image))
+                                .toList())),
             Row(
               children: [
                 Padding(
@@ -115,9 +123,7 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 ),
               ],
             ),
-            // Place_Card(),
-            // Place_Card(),
-            // Place_Card(),
+            Container(height: 500, child: Place_Card(places)),
           ],
         ),
       ),
