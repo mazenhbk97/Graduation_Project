@@ -29,10 +29,20 @@ class CommentsProvider with ChangeNotifier {
   }
 
   Future<void> addComment(String placeId, Comment comment) async {
-    final url = Uri.parse("${Public.baseUrl}/comments/places/$placeId");
-    _comments.add(comment);
-    notifyListeners();
+    print(placeId);
+    final url = Uri.parse("${Public.baseUrl}/comments/new/places/$placeId");
+    print("comment ${comment.content}");
     final token = await Public.getToken();
-    await http.post(url, headers: {"auth-token": token});
+
+    try {
+      _comments.add(comment);
+      notifyListeners();
+      await http.post(url,
+          body: {"content": comment.content}, headers: {"auth-token": token});
+    } catch (e) {
+      _comments.remove(comment);
+      notifyListeners();
+      print("commentError error $e");
+    }
   }
 }
