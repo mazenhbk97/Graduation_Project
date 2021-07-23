@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/MyAppBar.dart';
 import 'package:re7al/data_models/user.dart';
+import 'package:re7al/helpers/public.dart';
 import 'package:re7al/providers/auth_provider.dart';
+import 'package:re7al/screens/FAQ.dart';
+import 'package:re7al/screens/about_us.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({Key key}) : super(key: key);
@@ -22,7 +25,7 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<AuthProvider>(context, listen: false).user;
+    User user = Provider.of<AuthProvider>(context).user;
     return Drawer(
       // column holds all the widgets in the drawer
       child: Column(
@@ -35,16 +38,23 @@ class _SideMenuState extends State<SideMenu> {
                   currentAccountPicture: GestureDetector(
                     onTap: iconTap,
                     child: CircleAvatar(
-                        foregroundImage: user == null ? PpImg : user.imgUrl,
+                        foregroundImage: user == null
+                            ? PpImg
+                            : NetworkImage(user.imgUrl == null
+                                ? Public.defaultPPIC
+                                : user.imgUrl),
                         maxRadius: 50),
                   ),
                   accountName: GestureDetector(
-                    child: Text(user == null ? 'Account Name' : user.name),
+                    child: Text(user == null || user.name == null
+                        ? 'Account Name'
+                        : user.name),
                     onTap: iconTap,
                   ),
                   accountEmail: GestureDetector(
-                    child: Text(
-                        user == null ? 'Account_Email@gmail.com' : user.email),
+                    child: Text(user == null || user.name == null
+                        ? 'Account_Email@gmail.com'
+                        : user.email),
                     onTap: iconTap,
                   ),
                 ),
@@ -86,7 +96,6 @@ class _SideMenuState extends State<SideMenu> {
                     // Update the state of the app
                     // ...
                     // Then close the drawer
-                    Navigator.pop(context);
                   },
                 ),
                 ListTile(
@@ -96,37 +105,50 @@ class _SideMenuState extends State<SideMenu> {
                     // Update the state of the app
                     // ...
                     // Then close the drawer
-                    Navigator.pop(context);
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) => FAQ()));
                   },
                 ),
+                ListTile(
+                  leading: Icon(Icons.contact_support_outlined),
+                  title: Text('About us '),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) => AboutUs()));
+                  },
+                ),
+                Container(
+                    // This align moves the children to the bottom
+                    child: Align(
+
+                        // This container holds all the children that will be aligned
+                        // on the bottom and should not scroll with the above ListView
+                        child: Container(
+                            child: Column(
+                  children: <Widget>[
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.logout),
+                      title: Text('LogOut'),
+                      onTap: () async {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .logout();
+
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ))))
               ],
             ),
           ),
           // This container holds the align
-          Container(
-              // This align moves the children to the bottom
-              child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  // This container holds all the children that will be aligned
-                  // on the bottom and should not scroll with the above ListView
-                  child: Container(
-                      child: Column(
-                    children: <Widget>[
-                      Divider(),
-                      ListTile(
-                        leading: Icon(Icons.logout),
-                        title: Text('LogOut'),
-                        onTap: () async {
-                          // Update the state of the app
-                          // ...
-                          // Then close the drawer
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .logout();
-                          Navigator.pushNamed(context, 'Login');
-                        },
-                      ),
-                    ],
-                  ))))
         ],
       ),
     );

@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/data_models/comment.dart';
 import 'package:re7al/data_models/user.dart';
+import 'package:re7al/helpers/public.dart';
 import 'package:re7al/providers/auth_provider.dart';
 import 'package:re7al/providers/commets_provider.dart';
+import 'package:re7al/screens/SignUp.dart';
 
 class BottomSheetModal extends StatefulWidget {
   String placeId;
@@ -29,7 +33,8 @@ class _BottomSheetModalState extends State<BottomSheetModal> {
   bool fav = true;
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<AuthProvider>(context, listen: false).user;
+    User user = Provider.of<AuthProvider>(context).user;
+
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 10, right: 15, left: 15),
       child: Container(
@@ -41,7 +46,8 @@ class _BottomSheetModalState extends State<BottomSheetModal> {
           leading: CircleAvatar(
             backgroundColor: font_color,
             child: CircleAvatar(
-              backgroundImage: NetworkImage(user.imgUrl),
+              foregroundImage:
+                  NetworkImage(user == null ? Public.defaultPPIC : user.imgUrl),
               backgroundColor: Colors.white,
               child: Icon(Icons.person_outline_rounded),
               foregroundColor: font_color,
@@ -61,115 +67,148 @@ class _BottomSheetModalState extends State<BottomSheetModal> {
               isScrollControlled: true,
               context: context,
               builder: (BuildContext context) {
-                return Container(
-                  decoration: BoxDecoration(
-                      color: font_color,
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          topLeft: Radius.circular(20))),
-                  height: 300,
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 20, bottom: 20),
-                              child: TextFormField(
-                                controller: commentController,
-                                onFieldSubmitted: (v) async {
-                                  if (v.trim().length == 0 || v.length < 5) {
-                                    setState(() {
-                                      isValid = false;
-                                    });
-                                  } else {
-                                    Comment comment = Comment(
-                                        content: v,
-                                        id: DateTime.now().toString(),
-                                        userId: user.id,
-                                        placeId: int.parse(widget.placeId),
-                                        userImage: user.imgUrl,
-                                        userName: user.name);
-                                    await Provider.of<CommentsProvider>(context,
-                                            listen: false)
-                                        .addComment(widget.placeId, comment);
-                                    commentController.clear();
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  errorText: isValid ? null : "Short Comment",
-                                  prefixIcon: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(80),
-                                        color: Colors.white),
-                                    child: CircleAvatar(
-                                      backgroundColor: font_color,
-                                      backgroundImage:
-                                          NetworkImage(user.imgUrl),
-                                      radius: 10,
-                                      child: Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 20,
+                User _user = Provider.of<AuthProvider>(context).user;
+
+                return StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setSt) =>
+                        Container(
+                          decoration: BoxDecoration(
+                              color: font_color,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(20),
+                                  topLeft: Radius.circular(20))),
+                          height: 300,
+                          child: Center(
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 20, bottom: 20),
+                                      child: TextFormField(
+                                        onTap: _user == null
+                                            ? () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (ctx) =>
+                                                            SignUp()));
+                                              }
+                                            : null,
+                                        controller: commentController,
+                                        onFieldSubmitted: (v) async {
+                                          if (v.trim().length == 0 ||
+                                              v.length < 5) {
+                                            isValid = false;
+                                            setSt(() {});
+                                          } else {
+                                            isValid = true;
+                                            setSt(() {});
+
+                                            Comment comment = Comment(
+                                                content: v,
+                                                id: DateTime.now().toString(),
+                                                userId: _user.id,
+                                                placeId:
+                                                    int.parse(widget.placeId),
+                                                userImage: _user.imgUrl,
+                                                userName: _user.name);
+                                            await Provider.of<CommentsProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .addComment(
+                                                    widget.placeId, comment);
+                                            commentController.clear();
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          errorText:
+                                              isValid ? null : "Short Comment",
+                                          prefixIcon: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(80),
+                                                color: Colors.white),
+                                            child: CircleAvatar(
+                                              backgroundColor: font_color,
+                                              foregroundImage: NetworkImage(
+                                                  user == null
+                                                      ? Public.defaultPPIC
+                                                      : user.imgUrl),
+                                              radius: 10,
+                                              child: Icon(
+                                                Icons.person,
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          ),
+                                          hintText: '   Add a public comment',
+                                          suffixIcon: IconButton(
+                                            icon: Icon(Icons.arrow_forward),
+                                            onPressed: () async {
+                                              if (commentController.text
+                                                          .trim()
+                                                          .length ==
+                                                      0 ||
+                                                  commentController
+                                                          .text.length <
+                                                      5) {
+                                                isValid = false;
+                                                setSt(() {});
+                                              } else {
+                                                isValid = true;
+                                                setSt(() {});
+
+                                                Comment comment = Comment(
+                                                    content:
+                                                        commentController.text,
+                                                    id: DateTime.now()
+                                                        .toString(),
+                                                    userId: _user.id,
+                                                    placeId: int.parse(
+                                                        widget.placeId),
+                                                    userImage: _user.imgUrl,
+                                                    userName: _user.name);
+                                                await Provider.of<
+                                                            CommentsProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .addComment(widget.placeId,
+                                                        comment);
+                                                commentController.clear();
+                                              }
+                                            },
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  hintText: '   Add a public comment',
-                                  suffixIcon: IconButton(
-                                    icon: Icon(Icons.arrow_forward),
-                                    onPressed: () async {
-                                      if (commentController.text
-                                                  .trim()
-                                                  .length ==
-                                              0 ||
-                                          commentController.text.length < 5) {
-                                        setState(() {
-                                          isValid = false;
-                                        });
-                                      } else {
-                                        Comment comment = Comment(
-                                            content: commentController.text,
-                                            id: DateTime.now().toString(),
-                                            userId: user.id,
-                                            placeId: int.parse(widget.placeId),
-                                            userImage: user.imgUrl,
-                                            userName: user.name);
-                                        await Provider.of<CommentsProvider>(
-                                                context,
-                                                listen: false)
-                                            .addComment(
-                                                widget.placeId, comment);
-                                        commentController.clear();
-                                      }
-                                    },
-                                  ),
+                                    Consumer<CommentsProvider>(
+                                        builder: (ctx, commentsProv, _) =>
+                                            commentsProv.comment.isEmpty ||
+                                                    commentsProv.comment == null
+                                                ? Center(
+                                                    child: Text(
+                                                        "No comments for this place"),
+                                                  )
+                                                : Column(
+                                                    children: commentsProv
+                                                        .comment
+                                                        .map((comment) =>
+                                                            MBS_comment(
+                                                                comment))
+                                                        .toList(),
+                                                  ))
+                                  ],
                                 ),
                               ),
                             ),
-                            Consumer<CommentsProvider>(
-                                builder: (ctx, commentsProv, _) => commentsProv
-                                            .comment.isEmpty ||
-                                        commentsProv.comment == null
-                                    ? Center(
-                                        child:
-                                            Text("No comments for this place"),
-                                      )
-                                    : Column(
-                                        children: commentsProv.comment
-                                            .map((comment) =>
-                                                MBS_comment(comment))
-                                            .toList(),
-                                      ))
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                          ),
+                        ));
               },
             );
           },
@@ -248,6 +287,7 @@ class _MBS_commentState extends State<MBS_comment> {
                 style: TextStyle(color: Colors.white),
               ),
               TextButton(
+                onPressed: null,
                 child: Text(
                   'reply',
                   style: TextStyle(color: Colors.white),

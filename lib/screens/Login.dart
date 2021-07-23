@@ -15,6 +15,8 @@ class _LoginState extends State<Login> {
   String mail;
   String password;
 
+  bool isLoading = false;
+
   void setMail(String mailField) {
     setState(() {
       mail = mailField;
@@ -27,6 +29,7 @@ class _LoginState extends State<Login> {
     });
   }
 
+  var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,9 +84,12 @@ class _LoginState extends State<Login> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Login_TFF(
-                    saveName: setMail,
-                    savePassword: setPassword,
+                  child: Form(
+                    key: formKey,
+                    child: Login_TFF(
+                      saveName: setMail,
+                      savePassword: setPassword,
+                    ),
                   ),
                 ),
                 Row(
@@ -130,28 +136,44 @@ class _LoginState extends State<Login> {
                 SizedBox(
                   height: 40,
                 ),
-                Container(
-                  width: 280,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: user_auth,
-                  ),
-                  child: FlatButton(
-                    onPressed: () async {
-                      try {
-                        await Provider.of<AuthProvider>(context, listen: false)
-                            .signIn(mail, password);
-                        Navigator.of(context).pop();
-                      } catch (e) {
-                        showErrorMessage(e);
-                      }
-                    },
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
-                    ),
-                  ),
-                ),
+                isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
+                        width: 280,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: user_auth,
+                        ),
+                        child: FlatButton(
+                          onPressed: () async {
+                            if (formKey.currentState.validate()) {
+                              formKey.currentState.save();
+                              try {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                await Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .signIn(mail, password);
+                              } catch (e) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                showErrorMessage(e
+                                    .toString()
+                                    .split(")")[1]
+                                    .replaceAll("^", ""));
+                              }
+                            }
+                          },
+                          child: Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          ),
+                        ),
+                      ),
                 SizedBox(
                   height: 15,
                 ),

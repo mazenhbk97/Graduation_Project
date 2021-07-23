@@ -24,7 +24,6 @@ class AuthProvider with ChangeNotifier {
   User _user;
 
   User get user {
-    print("user: $_user");
     return _user;
   }
 
@@ -33,7 +32,6 @@ class AuthProvider with ChangeNotifier {
   }
 
   String get token {
-    print("token: $_token");
     return _token;
   }
 
@@ -68,15 +66,17 @@ class AuthProvider with ChangeNotifier {
                   'password': password,
                 })
               : jsonEncode(register));
-      final responseData = jsonDecode(response.body);
+      final responseData = jsonDecode(response.body) as Map<String, dynamic>;
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
       _token = responseData['token'];
+      _user = User.fromMap(responseData.containsKey("user")
+          ? responseData["user"]
+          : responseData);
 
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
-      _token = prefs.getString('token');
       notifyListeners();
     } catch (e) {
       // print("##### ${e.toString()}");
@@ -86,6 +86,7 @@ class AuthProvider with ChangeNotifier {
 
   void logout() async {
     _token = null;
+    _user = null;
 
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
@@ -128,7 +129,6 @@ class AuthProvider with ChangeNotifier {
       _user = User.fromMap(responseData);
       notifyListeners();
     } catch (e) {
-      print("error $e");
       throw e;
     }
   }
@@ -136,42 +136,43 @@ class AuthProvider with ChangeNotifier {
   Future<User> getProfile() async {
     final url = Uri.parse('https://rehalapp2021.herokuapp.com/users/profile');
     final pref = await SharedPreferences.getInstance();
-    String token = pref.getString('token');
-    _token = token;
-    try {
-      final response = await http.get(url, headers: {'auth-token': _token});
-      final responseData = jsonDecode(response.body) as Map<String, dynamic>;
-      print(responseData);
+    if (pref.containsKey("token") || _token != null) {
+      String token = pref.getString('token');
+      _token = _token ?? token;
+      try {
+        final response = await http.get(url, headers: {'auth-token': token});
+        final responseData = jsonDecode(response.body) as Map<String, dynamic>;
 
-      _user = User.fromMap(responseData);
-      print("use:: ${_user.name}");
-      notifyListeners();
-    } catch (e) {
-      print(e);
-      throw e;
+        _user = User.fromMap(responseData);
+        notifyListeners();
+      } catch (e) {
+        throw e;
+      }
     }
     return _user;
-
-    // void _autoLogout() {
-    //   if (_authTimer != null) {
-    //     _authTimer.cancel();
-    //   }
-    //   final timeToExpire = _expiryDate.difference(DateTime.now()).inSeconds;
-    //   _authTimer = Timer(Duration(seconds: timeToExpire), logout);
-    // }
   }
 
   Future<void> googleSign() async {
     try {
       final googleSign = GoogleSignIn();
       final googleAccount = await googleSign.signIn();
-
       if (googleAccount == null) {
         throw HttpException("Cancelled by user");
       }
-      final uri = Uri.parse("${Public.baseUrl}/users/Oauth/google");
       final googleSignIn = await googleAccount.authentication;
-      await http.post(uri, body: {"access_token": googleSignIn.accessToken});
+      final uri = Uri.parse("${Public.baseUrl}/users/Oauth/google");
+      final response = await http
+          .post(uri, body: {"access_token": googleSignIn.accessToken});
+      final responseData = jsonDecode(response.body);
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+      _token = responseData['token'];
+
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', _token);
+      _token = prefs.getString('token');
+      notifyListeners();
     } catch (e) {
       throw HttpException("Error While Loggin in");
     }

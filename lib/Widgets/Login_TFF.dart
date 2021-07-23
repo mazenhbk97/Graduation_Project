@@ -16,7 +16,7 @@ class _Login_TFFState extends State<Login_TFF> {
   String _email;
   String _password;
   bool passvisible = true;
-
+  var formKey = GlobalKey<FormState>();
   final TextEditingController _pass = TextEditingController();
 
   Widget _buildPassword() {
@@ -42,10 +42,10 @@ class _Login_TFFState extends State<Login_TFF> {
 
         return null;
       },
-      onFieldSubmitted: (String value) {
+      onSaved: (String value) {
         print("hello pass :$value");
         _password = value;
-        widget.savePassword(_password);
+        widget.savePassword(value);
       },
     );
   }
@@ -67,11 +67,11 @@ class _Login_TFFState extends State<Login_TFF> {
 
         return null;
       },
-      onFieldSubmitted: (String value) {
+      onSaved: (String value) {
         _email = value;
         print("hello mail :$value");
 
-        widget.saveName(_email);
+        widget.saveName(value);
       },
     );
   }
@@ -79,12 +79,11 @@ class _Login_TFFState extends State<Login_TFF> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          _buildEmail(),
-          _buildPassword(),
-        ],
-      ),
-    );
+        child: Column(
+      children: [
+        _buildEmail(),
+        _buildPassword(),
+      ],
+    ));
   }
 }

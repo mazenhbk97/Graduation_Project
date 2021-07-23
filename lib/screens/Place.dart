@@ -7,8 +7,11 @@ import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/Widgets/ModalBottomSheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:re7al/data_models/place.dart';
+import 'package:re7al/data_models/user.dart';
 import 'package:re7al/helpers/servicesData.dart';
+import 'package:re7al/providers/auth_provider.dart';
 import 'package:re7al/providers/places_provider.dart';
+import 'package:re7al/screens/SignUp.dart';
 import 'package:readmore/readmore.dart';
 import 'package:re7al/Widgets/Map.dart';
 import 'package:re7al/Widgets/BookingDialogue.dart';
@@ -25,10 +28,18 @@ class Place extends StatefulWidget {
 class _PlaceState extends State<Place> {
   TabController _tabController;
 
-  bool fav = true;
+  bool isFav = false;
   bool available = true;
   String typeOfPlace;
   String timeToVisit;
+
+  initState() {
+    Future.delayed(Duration.zero).then((_) {
+      isFav = Provider.of<PlacesProvider>(context, listen: false)
+          .isFav(widget.place.id);
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
@@ -37,8 +48,7 @@ class _PlaceState extends State<Place> {
 
   @override
   Widget build(BuildContext context) {
-    bool isFav = Provider.of<PlacesProvider>(context).isFav(widget.place.id);
-    print("isFav :$isFav");
+    User user = Provider.of<AuthProvider>(context).user;
     return DefaultTabController(
       length: 2,
       child: SafeArea(
@@ -143,13 +153,20 @@ class _PlaceState extends State<Place> {
                                           color: Colors.red,
                                         ),
                                         onPressed: () async {
-                                          await Provider.of<PlacesProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .favourite(widget.place);
-                                          setState(() {
-                                            isFav = false;
-                                          });
+                                          if (user != null) {
+                                            await Provider.of<PlacesProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .favourite(widget.place);
+                                            setState(() {
+                                              isFav = !isFav;
+                                            });
+                                          } else {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (ctx) =>
+                                                        SignUp()));
+                                          }
                                         },
                                       ),
                                     ),

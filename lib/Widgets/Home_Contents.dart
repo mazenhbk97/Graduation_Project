@@ -47,7 +47,7 @@ class _Home_ContentsState extends State<Home_Contents> {
         ),
         drawer: SideMenu(),
         body: city == null
-            ? ChooseCity()
+            ? ChooseCityAlert()
             : FutureBuilder<List<PlaceModel>>(
                 future: Provider.of<PlacesProvider>(context, listen: false)
                     .getCityPlaces(city.id),
@@ -73,7 +73,8 @@ class _Home_ContentsState extends State<Home_Contents> {
                                       onTap: () {
                                         showDialog(
                                             context: context,
-                                            builder: (ctx) => ExploreAlert());
+                                            builder: (ctx) =>
+                                                ChooseCityAlert());
                                       },
                                       child: Container(
                                         margin:
@@ -185,7 +186,8 @@ class _Home_ContentsState extends State<Home_Contents> {
                                   ],
                                 ),
                                 Container(
-                                    height: 500,
+                                    height:
+                                        MediaQuery.of(context).size.height * .9,
                                     child: Place_Card(snapshot.data)),
                               ],
                             ),

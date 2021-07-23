@@ -12,7 +12,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
 # Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# In iOS, build-namefl is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
@@ -27,6 +27,7 @@ dependencies:
   carousel_slider: ^3.0.0
   cupertino_icons: ^1.0.0
   dio: ^4.0.0
+  ext_storage: ^1.0.3
   flutter_rating_bar: ^4.0.0
   flutter_staggered_grid_view: ^0.4.0
   flutter_svg: ^0.22.0
@@ -38,14 +39,12 @@ dependencies:
   http_parser: ^4.0.0
   image_picker: ^0.7.4
   modal_bottom_sheet: ^2.0.0
-  downloads_path_provider: ^0.1.0
-  permission_handler: ^8.1.2
-  qr_flutter: ^4.0.0
-  screenshot: ^1.2.1
   pdf: ^3.4.2
-
+  permission_handler: ^8.1.2
   provider: ^5.0.0
+  qr_flutter: ^4.0.0
   readmore: ^2.0.0
+  screenshot: ^1.2.1
   shared_preferences: ^2.0.6
   toggle_switch: ^0.1.9
 

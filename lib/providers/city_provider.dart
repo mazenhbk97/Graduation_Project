@@ -23,7 +23,7 @@ class CityProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchCities() async {
+  Future<List<City>> fetchCities() async {
     try {
       final url = Uri.parse("${Public.baseUrl}/cities");
       final response = await http.get(url);
@@ -31,7 +31,8 @@ class CityProvider with ChangeNotifier {
       _cities = responseData
           .map((e) => City.fromMap(e as Map<String, dynamic>))
           .toList();
-      notifyListeners();
+      print(_cities.toString());
+      return [..._cities];
     } catch (e) {
       throw e;
     }

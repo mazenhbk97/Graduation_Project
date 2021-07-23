@@ -56,15 +56,16 @@ class PlacesProvider with ChangeNotifier {
     Uri uri = Uri.parse('${Public.baseUrl}/users/saved/$urlSeg');
 
     String token = await Public.getToken();
+    if (token != null) {
+      try {
+        final response = await http.get(uri, headers: {'auth-token': token});
 
-    try {
-      final response = await http.get(uri, headers: {'auth-token': token});
+        final responseData = jsonDecode(response.body) as List<dynamic>;
 
-      final responseData = jsonDecode(response.body) as List<dynamic>;
-
-      _savedPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
-    } catch (e) {
-      throw e;
+        _savedPlaces = responseData.map((e) => PlaceModel.fromJson(e)).toList();
+      } catch (e) {
+        throw e;
+      }
     }
     return [..._savedPlaces];
   }
@@ -88,7 +89,6 @@ class PlacesProvider with ChangeNotifier {
     try {
       final url = Uri.parse("${Public.baseUrl}/users/savePlaces/${place.id}");
       String token = await Public.getToken();
-      print(token);
 
       if (_savedPlaces.contains(place)) {
         _savedPlaces.remove(place);
@@ -108,13 +108,10 @@ class PlacesProvider with ChangeNotifier {
         "${Public.baseUrl}/places/cities/$cityId/services/$serviceId");
 
     String token = await Public.getToken();
-    print(
-      "cityId :$cityId    serviceId: $serviceId",
-    );
+
     List<PlaceModel> nearest = [];
     try {
       final response = await http.get(uri, headers: {'auth-token': token});
-      print("response :${response.body}");
       final responseData = jsonDecode(response.body) as List<dynamic>;
       nearest = responseData.map((e) => PlaceModel.fromJson(e)).toList();
     } catch (e) {

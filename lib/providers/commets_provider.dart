@@ -17,7 +17,6 @@ class CommentsProvider with ChangeNotifier {
 
     final token = await Public.getToken();
     final response = await http.get(url, headers: {"auth-token": token});
-    print("commentsTypye :${response.body.runtimeType}");
     final responseData = jsonDecode(response.body) as List<dynamic>;
     List<Comment> tempList = [];
     responseData.forEach((element) {
@@ -29,9 +28,7 @@ class CommentsProvider with ChangeNotifier {
   }
 
   Future<void> addComment(String placeId, Comment comment) async {
-    print(placeId);
     final url = Uri.parse("${Public.baseUrl}/comments/new/places/$placeId");
-    print("comment ${comment.content}");
     final token = await Public.getToken();
 
     try {
@@ -42,7 +39,7 @@ class CommentsProvider with ChangeNotifier {
     } catch (e) {
       _comments.remove(comment);
       notifyListeners();
-      print("commentError error $e");
+      throw e;
     }
   }
 }

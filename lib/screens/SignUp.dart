@@ -13,6 +13,7 @@ class SignUp extends StatefulWidget {
 }
 
 class FormScreenState extends State<SignUp> {
+  bool isLoading = false;
   String _firstname;
   String _lastname;
   String _email;
@@ -217,36 +218,49 @@ class FormScreenState extends State<SignUp> {
                           ],
                         )),
                   ),
-                  Container(
-                    width: 280,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: user_auth,
-                    ),
-                    child: FlatButton(
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(color: Colors.white, fontSize: 25),
-                        //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () async {
-                        if (!_formKey.currentState.validate()) {
-                          return;
-                        }
-                        _formKey.currentState.save();
-                        try {
-                          await Provider.of<AuthProvider>(context,
-                                  listen: false)
-                              .signUp(_email, _password, _firstname + _lastname,
-                                  'Arish');
-                          Navigator.popUntil(
-                              context, ModalRoute.withName('HomeScreen'));
-                        } catch (e) {
-                          showErrorMessage(e);
-                        }
-                      },
-                    ),
-                  ),
+                  isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Container(
+                          width: 280,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: user_auth,
+                          ),
+                          child: FlatButton(
+                            child: Text(
+                              'Sign Up',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 25),
+                              //style: kBodyText.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () async {
+                              if (!_formKey.currentState.validate()) {
+                                return;
+                              }
+                              _formKey.currentState.save();
+                              try {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                await Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .signUp(_email, _password,
+                                        _firstname + _lastname, 'Arish');
+                                Navigator.of(context).pop();
+                              } catch (e) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                showErrorMessage(e
+                                    .toString()
+                                    .split(")")[1]
+                                    .replaceAll("^", ""));
+                              }
+                            },
+                          ),
+                        ),
                 ],
               ),
             ),

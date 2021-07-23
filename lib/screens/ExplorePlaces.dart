@@ -44,9 +44,11 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () => () {
-                showDialog(context: context, builder: (ctx) => ExploreAlert());
+            InkWell(
+              onTap: () {
+                print("Showing Dialog");
+                showDialog(
+                    context: context, builder: (ctx) => ChooseCityAlert());
               },
               child: Row(
                 children: [
@@ -123,7 +125,9 @@ class _ExplorePlacesState extends State<ExplorePlaces> {
                 ),
               ],
             ),
-            Container(height: 500, child: Place_Card(places)),
+            Container(
+                height: MediaQuery.of(context).size.height * .9,
+                child: Place_Card(places)),
           ],
         ),
       ),

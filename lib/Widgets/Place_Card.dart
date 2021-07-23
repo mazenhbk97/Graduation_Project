@@ -242,6 +242,8 @@ class _Place_CardState extends State<Place_Card> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: StaggeredGridView.countBuilder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       crossAxisCount: 4,
       itemCount: widget.places.length,
       itemBuilder: (BuildContext context, int i) => GestureDetector(
@@ -252,7 +254,7 @@ class _Place_CardState extends State<Place_Card> {
         child: _Card1(widget.places[i].image, widget.places[i].name,
             widget.places[i].rating, widget.places[i].id),
       ),
-      staggeredTileBuilder: (int index) => new StaggeredTile.count(2, 2),
+      staggeredTileBuilder: (int index) => StaggeredTile.count(2, 2),
       mainAxisSpacing: 4.0,
       crossAxisSpacing: 4.0,
     ));

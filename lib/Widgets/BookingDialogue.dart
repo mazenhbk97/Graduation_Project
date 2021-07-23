@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:re7al/Widgets/Constants.dart';
 import 'package:re7al/data_models/place.dart';
+import 'package:re7al/data_models/user.dart';
+import 'package:re7al/providers/auth_provider.dart';
 import 'package:re7al/providers/booking_provider.dart';
+import 'package:re7al/screens/SignUp.dart';
 import 'package:re7al/screens/qrcode_screen.dart';
 
 enum Gender { VisaCard, MasterCard, Fawry, Cash }
@@ -56,6 +59,7 @@ class _BookingDialogueState extends State<BookingDialogue> {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<AuthProvider>(context).user;
     return SimpleDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -336,23 +340,29 @@ class _BookingDialogueState extends State<BookingDialogue> {
             ),
             child: FlatButton(
               onPressed: () async {
-                try {
-                  await Provider.of<BookingProvider>(context, listen: false)
-                      .newBooking(widget.place.id, _n);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => QrCode(widget.place.name)));
-                } catch (e) {
-                  showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                            title: Text("Operation failed"),
-                            content: Text("You already booked this place"),
-                            actions: [
-                              FlatButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: Text("Ok"))
-                            ],
-                          ));
+                if (user != null) {
+                  try {
+                    await Provider.of<BookingProvider>(context, listen: false)
+                        .newBooking(widget.place.id, _n);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => QrCode(widget.place.name)));
+                  } catch (e) {
+                    showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                              title: Text("Operation failed"),
+                              content: Text("You already booked this place"),
+                              actions: [
+                                FlatButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: Text("Ok"))
+                              ],
+                            ));
+                  }
+                } else {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (ctx) => SignUp()));
                 }
               },
               child: Text(
